@@ -183,6 +183,11 @@ div[data-inc] {
     position: relative;
 }
 
+/* Italicize output files */
+div[data-inc$=".out"] pre {
+    font-style: italic;
+}
+
 /* File path icon: positioned top-right of inclusion */
 .inc-path {
     position: absolute;

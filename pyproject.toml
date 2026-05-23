@@ -8,6 +8,10 @@ dependencies = [
     "taskipy>=1.14.1",
 ]
 
+[tool.taskipy.tasks.regen]
+help = "Regenerate .out files from .lean files."
+cmd = "python bin/regenerate.py basics"
+
 [tool.taskipy.tasks.bib]
 help = "Check bibliography entries."
 cmd = "mccole bib"
@@ -16,6 +20,7 @@ cmd = "mccole bib"
 help = "Clean up generated and cache files."
 cmd = """
     find . -type f -name '*~' -exec rm {} \\;
+    rm -f */*.out
 """
 
 [tool.taskipy.tasks.check]
@@ -39,7 +44,10 @@ cmd = """
 [tool.mccole]
 brand = "L4Py"
 skips = [
+    "*.lean",
+    "*.out",
     "*~",
+    "bin/**",
     "docs/**",
     "uv.lock"
 ]

@@ -8,6 +8,7 @@
 <div id="lessons" markdown="1">
 
 1.  [Introduction](@/intro/)
+1.  [Basics](@/basics/)
 1.  [Conclusion](@/finale/)
 
 </div>
