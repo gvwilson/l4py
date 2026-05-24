@@ -397,6 +397,29 @@ none
 <li>Access fields with <code>.fieldName</code></li>
 <li>Create a value by listing field names with <code>:=</code> inside <code>{}</code></li>
 </ul>
+<h2>Checking and Updating</h2>
+<div data-inc="check_update.lean"><span aria-label="Source: basics/check_update.lean" class="inc-path" role="img" tabindex="0" title="basics/check_update.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="mi">123</span>
+
+<span class="kn">structure</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="kn">where</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Float</span>
+<span class="w">  </span><span class="n">y</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Float</span>
+
+<span class="kn">def</span><span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.0</span><span class="o">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">}</span>
+<span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="n">origin</span>
+
+<span class="kn">def</span><span class="w"> </span><span class="n">elsewhere</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">{</span><span class="n">origin</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">}</span>
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">elsewhere</span>
+</code></pre></div>
+</div>
+<div data-inc="check_update.out"><span aria-label="Source: basics/check_update.out" class="inc-path" role="img" tabindex="0" title="basics/check_update.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>123 : Nat
+origin : Point
+{ x := 1.000000, y := 0.000000 }
+</code></pre></div>
+</div>
+<ul>
+<li><code>#check</code> checks the type of an expression without evaluating it</li>
+<li><code>Nat</code> is a natural (non-negative) number</li>
+</ul>
 <h2>Type Inference</h2>
 <div data-inc="type_inference.lean"><span aria-label="Source: basics/type_inference.lean" class="inc-path" role="img" tabindex="0" title="basics/type_inference.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Lean can infer the type from the value</span>
 <span class="kn">def</span><span class="w"> </span><span class="n">greeting</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s2">"hello"</span>

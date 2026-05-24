@@ -169,6 +169,14 @@
 -   Access fields with `.fieldName`
 -   Create a value by listing field names with `:=` inside `{}`
 
+## Checking and Updating
+
+[%inc check_update.lean %]
+[%inc check_update.out %]
+
+-   `#check` checks the type of an expression without evaluating it
+-   `Nat` is a natural (non-negative) number
+
 ## Type Inference
 
 [%inc type_inference.lean %]
