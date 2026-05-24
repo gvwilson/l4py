@@ -1,5 +1,7 @@
 # Basics
 
+-   We have to start somewhere
+
 ## Add Numbers
 
 [%inc add_numbers.lean %]

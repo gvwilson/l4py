@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Types</title>
+<meta content="Lean for Python Programmers" name="description"/>
+<link href="../_static/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="../_static/pygments.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/chota.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/mccole.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<nav aria-label="Site navigation" class="nav">
+<div class="nav-left">
+<a class="brand" href="../">L4Py</a>
+<div class="dropdown">
+<button aria-controls="nav-lessons" aria-haspopup="true">Lessons</button>
+<ul class="dropdown-content" id="nav-lessons">
+<li><a href="../intro/">Introduction</a></li>
+<li><a href="../basics/">Basics</a></li>
+<li><a class="active" href="../types/">Types</a></li>
+<li><a href="../finale/">Conclusion</a></li>
+</ul>
+</div>
+<div class="dropdown">
+<button aria-controls="nav-appendices" aria-haspopup="true">Appendices</button>
+<ul class="dropdown-content" id="nav-appendices">
+<li><a href="../license/">License</a></li>
+<li><a href="../conduct/">Code of Conduct</a></li>
+<li><a href="../contributing/">Contributing</a></li>
+<li><a href="../bibliography/">Bibliography</a></li>
+<li><a href="../glossary/">Glossary</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<main id="main-content">
+<h1>Types</h1>
+<ul>
+<li>A structure is a <a class="gl-ref" href="../glossary/#product_type">product type</a><ul>
+<li>Possible values are the cross-product of the values of the first field
+    with the values of the second field, etc.</li>
+</ul>
+</li>
+<li>Explore other kinds of types</li>
+</ul>
+<h2>Sum Types</h2>
+<div data-inc="sum_types.lean"><span aria-label="Source: types/sum_types.lean" class="inc-path" role="img" tabindex="0" title="types/sum_types.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- A sum type that can hold either a String or an Int</span>
+<span class="kn">inductive</span><span class="w"> </span><span class="n">StringOrInt</span><span class="w"> </span><span class="kn">where</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">str</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">StringOrInt</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">num</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">StringOrInt</span>
+<span class="n">deriving</span><span class="w"> </span><span class="n">Repr</span>
+
+<span class="c1">-- Construct a value of each kind</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">greeting</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">StringOrInt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">str</span><span class="w"> </span><span class="s2">"hello"</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">answer</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">StringOrInt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">num</span><span class="w"> </span><span class="mi">42</span>
+
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">greeting</span>
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">answer</span>
+
+<span class="c1">-- A list can hold a mix of both</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">mixed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">StringOrInt</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">[</span>
+<span class="w">  </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">str</span><span class="w"> </span><span class="s2">"hello"</span><span class="o">,</span>
+<span class="w">  </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">num</span><span class="w"> </span><span class="mi">42</span><span class="o">,</span>
+<span class="w">  </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">str</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="o">]</span>
+
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">mixed</span>
+
+<span class="c1">-- Use pattern matching to extract the value</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">describe</span><span class="w"> </span><span class="o">(</span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">StringOrInt</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">match</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">with</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">str</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">s!</span><span class="s2">"string: </span><span class="se">\"</span><span class="s2">{s}</span><span class="se">\"</span><span class="s2">"</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">StringOrInt</span><span class="bp">.</span><span class="n">num</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">s!</span><span class="s2">"number: {n}"</span>
+
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">describe</span><span class="w"> </span><span class="n">greeting</span>
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">describe</span><span class="w"> </span><span class="n">answer</span>
+</code></pre></div>
+</div>
+<div data-inc="sum_types.out"><span aria-label="Source: types/sum_types.out" class="inc-path" role="img" tabindex="0" title="types/sum_types.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>StringOrInt.str "hello"
+StringOrInt.num 42
+[StringOrInt.str "hello", StringOrInt.num 42, StringOrInt.str "world"]
+"string: \"hello\""
+"number: 42"
+</code></pre></div>
+</div>
+<ul>
+<li>An <a class="gl-ref" href="../glossary/#sum_type">sum type</a> is a choice between alternatives<ul>
+<li>The possible values are the sum of the possibilities of each alternative</li>
+<li>Use <code>inductive</code> to define one: we'll explain the name later (DEBT)</li>
+</ul>
+</li>
+<li><code>StringOrInt</code> is a type whose values wrap either a <code>String</code> or an <code>Int</code><ul>
+<li><code>StringOrInt.str</code> constructs a string-flavored value</li>
+<li><code>StringOrInt.num</code> constructs a number-flavored value</li>
+</ul>
+</li>
+<li><code>deriving Repr</code> is like Python's <code>__repr__</code><ul>
+<li>We'll explain why it's called <code>deriving</code> later (DEBT)</li>
+</ul>
+</li>
+<li>Since every element of the list has type <code>StringOrInt</code>, the list is homogeneous</li>
+<li>Use <code>match</code> to extract the wrapped value<ul>
+<li>The compiler checks that you handle both cases</li>
+</ul>
+</li>
+<li>We've already seen a sum type: <code>Option</code> in <a href="../basics/">basics</a> is either <code>some</code> or <code>none</code></li>
+</ul>
+</main>
+<footer aria-label="Page navigation">
+<div class="row">
+<div class="col-3 left">
+<span aria-hidden="true">⇐</span> <a href="../basics">Basics</a>
+</div>
+<div class="col-6 center">
+<a href="../">L4Py</a>
+	  ©
+	  <a href="../#acknowledgments">the authors</a>
+</div>
+<div class="col-3 right">
+<a href="../finale">Conclusion</a> <span aria-hidden="true">⇒</span>
+</div>
+</div>
+</footer>
+</body>
+</html>
