@@ -196,3 +196,119 @@
 -   Type `\cdot` in the editor and `\gt` to get `≥`
 -   If there are multiple parameters, each `·` matches the next one
     -   Which is an even worse usability decision, but we're stuck with it
+
+<div class="exercise" markdown="1">
+
+## Exercises
+
+### Fix: Missing Else Branch
+
+[%inc ex_bug_conditional.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The `describe` function doesn't handle the case when `n` is zero
+-   The compiler will reject this: add the missing `else` branch
+
+</details>
+
+### Fix: Non-Exhaustive Match
+
+[%inc ex_bug_match.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `firstOrZero` only handles the case where the list has at least one element
+-   Add a branch for the empty list that returns `0`
+
+</details>
+
+### Fix: Unhandled Option
+
+[%inc ex_bug_option.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `getValue` only handles `Option.some` but not `Option.none`
+-   Add a branch that returns `"missing"` when the option is `none`
+
+</details>
+
+### Fix: Wrong Base Case
+
+[%inc ex_bug_recursion.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Multiplying by zero gives zero, so the base case `[] => 0` breaks everything
+-   What should the product of an empty list be? (Hint: think about `1 * 2 * 3`)
+
+</details>
+
+### Fix: Wrong Return Type
+
+[%inc ex_bug_types.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The function body returns an `Int` but the type annotation says `String`
+-   Fix the type annotation to match what the body actually returns
+
+</details>
+
+### Write: Double a Number
+
+[%inc ex_double.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Replace `0.0` with an expression that doubles `x`
+-   The `#guard` statements will tell you if your solution is correct
+
+</details>
+
+### Write: Make a Greeting
+
+[%inc ex_greeting.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Replace `""` with a string that includes the person's name
+-   Use `s!"…"` interpolation like the examples earlier in the lesson
+
+</details>
+
+### Write: List Length
+
+[%inc ex_list_length.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Write a recursive function that counts the elements in a list
+-   Do not use `List.length` — implement it yourself with `match` and `::`
+
+</details>
+
+### Write: Swap a Tuple
+
+[%inc ex_swap_tuple.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Replace `("", 0)` with the elements of `p` in reverse order
+-   Use `.1` and `.2` to access the fields of the tuple
+
+</details>
+
+### Write: Update a Structure
+
+[%inc ex_update_struct.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Replace `p` with a new `Point` that has `x` incremented by `1.0`
+-   Use the `{ old with field := newVal }` syntax shown in the structures section
+
+</details>
+
+</div>

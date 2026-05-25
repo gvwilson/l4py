@@ -39,3 +39,18 @@
 -   `totalLength` uses `match` on the tree shape
 -   Compiler checks that code handles both `leaf` and `node` cases
     -   Same exhaustiveness guarantee as `match` on lists
+
+## Polymorphism
+
+[%inc polymorphism.lean %]
+[%inc polymorphism.out %]
+
+-   Add a [%g type_parameter "type parameter" %] to make a type work with any element type
+-   `α` (alpha) is the conventional Greek letter for the first type parameter
+    -   Type it as `\a` in Lean
+-   Same `inductive` shape as the string-only `Tree` above
+    -   But now `leaf` can hold any type
+-   `numTree` and `strTree` are the same shape, different leaf types
+    -   The compiler prevents you from putting a string leaf in `numTree`
+-   `countLeaves` works on `Tree α` for any `α`
+    -   Uses `_` in the `leaf` branch because it doesn't need the value, just the count

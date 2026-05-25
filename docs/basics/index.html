@@ -471,6 +471,174 @@ origin : Point
 </ul>
 </li>
 </ul>
+<div class="exercise">
+<h2>Exercises</h2>
+<h3>Fix: Missing Else Branch</h3>
+<div data-inc="ex_bug_conditional.lean"><span aria-label="Source: basics/ex_bug_conditional.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_bug_conditional.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- This function should return "positive", "negative", or "zero"</span>
+<span class="c1">-- but it has a bug. Fix it.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">describe</span><span class="w"> </span><span class="o">(</span><span class="n">n</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="bp">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="s2">"positive"</span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="bp">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="s2">"negative"</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>The <code>describe</code> function doesn't handle the case when <code>n</code> is zero</li>
+<li>The compiler will reject this: add the missing <code>else</code> branch</li>
+</ul>
+</details>
+<h3>Fix: Non-Exhaustive Match</h3>
+<div data-inc="ex_bug_match.lean"><span aria-label="Source: basics/ex_bug_match.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_bug_match.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- This function should return the first element of a list</span>
+<span class="c1">-- or 0 if the list is empty. Fix the bug.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">firstOrZero</span><span class="w"> </span><span class="o">(</span><span class="n">xs</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">match</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="k">with</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="bp">::</span><span class="w"> </span><span class="bp">_</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">x</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li><code>firstOrZero</code> only handles the case where the list has at least one element</li>
+<li>Add a branch for the empty list that returns <code>0</code></li>
+</ul>
+</details>
+<h3>Fix: Unhandled Option</h3>
+<div data-inc="ex_bug_option.lean"><span aria-label="Source: basics/ex_bug_option.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_bug_option.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- This function should extract a value from an Option</span>
+<span class="c1">-- or return "missing" for Option.none. Fix the bug.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">getValue</span><span class="w"> </span><span class="o">(</span><span class="n">opt</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Option</span><span class="w"> </span><span class="n">String</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">match</span><span class="w"> </span><span class="n">opt</span><span class="w"> </span><span class="k">with</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">Option</span><span class="bp">.</span><span class="n">some</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">s</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li><code>getValue</code> only handles <code>Option.some</code> but not <code>Option.none</code></li>
+<li>Add a branch that returns <code>"missing"</code> when the option is <code>none</code></li>
+</ul>
+</details>
+<h3>Fix: Wrong Base Case</h3>
+<div data-inc="ex_bug_recursion.lean"><span aria-label="Source: basics/ex_bug_recursion.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_bug_recursion.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- This function should return the product of all numbers in a list</span>
+<span class="c1">-- but it always returns 0. Fix the bug.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="o">(</span><span class="n">xs</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">match</span><span class="w"> </span><span class="n">xs</span><span class="w"> </span><span class="k">with</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="o">[]</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="bp">::</span><span class="w"> </span><span class="n">rest</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="bp">*</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="n">rest</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>Multiplying by zero gives zero, so the base case <code>[] =&gt; 0</code> breaks everything</li>
+<li>What should the product of an empty list be? (Hint: think about <code>1 * 2 * 3</code>)</li>
+</ul>
+</details>
+<h3>Fix: Wrong Return Type</h3>
+<div data-inc="ex_bug_types.lean"><span aria-label="Source: basics/ex_bug_types.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_bug_types.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- This function should return the sum of two integers</span>
+<span class="c1">-- but the type annotation is wrong. Fix the bug.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">add</span><span class="w"> </span><span class="o">(</span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="n">y</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="n">y</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>The function body returns an <code>Int</code> but the type annotation says <code>String</code></li>
+<li>Fix the type annotation to match what the body actually returns</li>
+</ul>
+</details>
+<h3>Write: Double a Number</h3>
+<div data-inc="ex_double.lean"><span aria-label="Source: basics/ex_double.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_double.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Write a function 'double' that multiplies a Float by 2.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">double</span><span class="w"> </span><span class="o">(</span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Float</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Float</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="mf">0.0</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">double</span><span class="w"> </span><span class="mf">3.0</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="mf">6.0</span>
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">double</span><span class="w"> </span><span class="o">(</span><span class="bp">-</span><span class="mf">1.5</span><span class="o">)</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="bp">-</span><span class="mf">3.0</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>Replace <code>0.0</code> with an expression that doubles <code>x</code></li>
+<li>The <code>#guard</code> statements will tell you if your solution is correct</li>
+</ul>
+</details>
+<h3>Write: Make a Greeting</h3>
+<div data-inc="ex_greeting.lean"><span aria-label="Source: basics/ex_greeting.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_greeting.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Write a function 'greet' that returns s!"Hello, {name}!".</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">greet</span><span class="w"> </span><span class="o">(</span><span class="n">name</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="s2">""</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">greet</span><span class="w"> </span><span class="s2">"World"</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="s2">"Hello, World!"</span>
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">greet</span><span class="w"> </span><span class="s2">"Lean"</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="s2">"Hello, Lean!"</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>Replace <code>""</code> with a string that includes the person's name</li>
+<li>Use <code>s!"…"</code> interpolation like the examples earlier in the lesson</li>
+</ul>
+</details>
+<h3>Write: List Length</h3>
+<div data-inc="ex_list_length.lean"><span aria-label="Source: basics/ex_list_length.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_list_length.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Write a function 'myLength' that returns the length of a List Int</span>
+<span class="c1">-- using recursion. Do not use List.length.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">myLength</span><span class="w"> </span><span class="o">(</span><span class="n">xs</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Nat</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="mi">0</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">myLength</span><span class="w"> </span><span class="o">[]</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="mi">0</span>
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">myLength</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">,</span><span class="w"> </span><span class="mi">2</span><span class="o">,</span><span class="w"> </span><span class="mi">3</span><span class="o">]</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="mi">3</span>
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">myLength</span><span class="w"> </span><span class="o">[</span><span class="mi">5</span><span class="o">]</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="mi">1</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>Write a recursive function that counts the elements in a list</li>
+<li>Do not use <code>List.length</code> — implement it yourself with <code>match</code> and <code>::</code></li>
+</ul>
+</details>
+<h3>Write: Swap a Tuple</h3>
+<div data-inc="ex_swap_tuple.lean"><span aria-label="Source: basics/ex_swap_tuple.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_swap_tuple.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Write a function 'swap' that takes (Int, String)</span>
+<span class="c1">-- and returns (String, Int) with the elements exchanged.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">swap</span><span class="w"> </span><span class="o">(</span><span class="n">p</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="bp">×</span><span class="w"> </span><span class="n">String</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">×</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="o">(</span><span class="s2">""</span><span class="o">,</span><span class="w"> </span><span class="mi">0</span><span class="o">)</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">swap</span><span class="w"> </span><span class="o">(</span><span class="mi">42</span><span class="o">,</span><span class="w"> </span><span class="s2">"hello"</span><span class="o">)</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="o">(</span><span class="s2">"hello"</span><span class="o">,</span><span class="w"> </span><span class="mi">42</span><span class="o">)</span>
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">swap</span><span class="w"> </span><span class="o">(</span><span class="mi">7</span><span class="o">,</span><span class="w"> </span><span class="s2">"seven"</span><span class="o">)</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="o">(</span><span class="s2">"seven"</span><span class="o">,</span><span class="w"> </span><span class="mi">7</span><span class="o">)</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>Replace <code>("", 0)</code> with the elements of <code>p</code> in reverse order</li>
+<li>Use <code>.1</code> and <code>.2</code> to access the fields of the tuple</li>
+</ul>
+</details>
+<h3>Write: Update a Structure</h3>
+<div data-inc="ex_update_struct.lean"><span aria-label="Source: basics/ex_update_struct.lean" class="inc-path" role="img" tabindex="0" title="basics/ex_update_struct.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="kn">structure</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="kn">where</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Float</span>
+<span class="w">  </span><span class="n">y</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Float</span>
+
+<span class="c1">-- Write a function 'moveRight' that takes a Point</span>
+<span class="c1">-- and returns a new Point with x increased by 1.0.</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">moveRight</span><span class="w"> </span><span class="o">(</span><span class="n">p</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Point</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">p</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">moveRight</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">3.0</span><span class="o">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">4.0</span><span class="o">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">}</span>
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">moveRight</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">0.0</span><span class="o">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="o">}</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">1.0</span><span class="o">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="o">}</span>
+</code></pre></div>
+</div>
+<details>
+<summary>hint</summary>
+<ul>
+<li>Replace <code>p</code> with a new <code>Point</code> that has <code>x</code> incremented by <code>1.0</code></li>
+<li>Use the <code>{ old with field := newVal }</code> syntax shown in the structures section</li>
+</ul>
+</details>
+</div>
 </main>
 <footer aria-label="Page navigation">
 <div class="row">

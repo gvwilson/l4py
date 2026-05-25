@@ -160,6 +160,54 @@ StringOrInt.num 42
 </ul>
 </li>
 </ul>
+<h2>Polymorphism</h2>
+<div data-inc="polymorphism.lean"><span aria-label="Source: types/polymorphism.lean" class="inc-path" role="img" tabindex="0" title="types/polymorphism.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- A polymorphic binary tree: leaves can be any type α</span>
+<span class="kn">inductive</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="o">(</span><span class="n">α</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">Type</span><span class="o">)</span><span class="w"> </span><span class="kn">where</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">leaf</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="n">α</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="n">α</span>
+<span class="n">deriving</span><span class="w"> </span><span class="n">Repr</span>
+
+<span class="c1">-- A function that works for trees of any type</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">countLeaves</span><span class="w"> </span><span class="o">(</span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="n">α</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Nat</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">match</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">with</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="bp">_</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">Tree</span><span class="bp">.</span><span class="n">node</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="n">right</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">countLeaves</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="n">countLeaves</span><span class="w"> </span><span class="n">right</span>
+
+<span class="c1">-- A tree of numbers</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">numTree</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="n">Nat</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">Tree</span><span class="bp">.</span><span class="n">node</span>
+<span class="w">    </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">node</span>
+<span class="w">      </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="mi">1</span><span class="o">)</span>
+<span class="w">      </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="mi">2</span><span class="o">))</span>
+<span class="w">    </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="mi">3</span><span class="o">)</span>
+
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">numTree</span>
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">countLeaves</span><span class="w"> </span><span class="n">numTree</span>
+</code></pre></div>
+</div>
+<div data-inc="polymorphism.out"><span aria-label="Source: types/polymorphism.out" class="inc-path" role="img" tabindex="0" title="types/polymorphism.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>Tree.node (Tree.node (Tree.leaf 1) (Tree.leaf 2)) (Tree.leaf 3)
+3
+</code></pre></div>
+</div>
+<ul>
+<li>Add a <a class="gl-ref" href="../glossary/#type_parameter">type parameter</a> to make a type work with any element type</li>
+<li><code>α</code> (alpha) is the conventional Greek letter for the first type parameter<ul>
+<li>Type it as <code>\a</code> in Lean</li>
+</ul>
+</li>
+<li>Same <code>inductive</code> shape as the string-only <code>Tree</code> above<ul>
+<li>But now <code>leaf</code> can hold any type</li>
+</ul>
+</li>
+<li><code>numTree</code> and <code>strTree</code> are the same shape, different leaf types<ul>
+<li>The compiler prevents you from putting a string leaf in <code>numTree</code></li>
+</ul>
+</li>
+<li><code>countLeaves</code> works on <code>Tree α</code> for any <code>α</code><ul>
+<li>Uses <code>_</code> in the <code>leaf</code> branch because it doesn't need the value, just the count</li>
+</ul>
+</li>
+</ul>
 </main>
 <footer aria-label="Page navigation">
 <div class="row">
