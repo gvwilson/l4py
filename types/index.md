@@ -22,3 +22,20 @@
 -   Use `match` to extract the wrapped value
     -   The compiler checks that you handle both cases
 -   We've already seen a sum type: `Option` in [basics](@/basics/) is either `some` or `none`
+
+## Trees
+
+[%inc binary_tree.lean %]
+[%inc binary_tree.out %]
+
+-   `inductive` can define recursive types, not just flat sums
+    -   `Tree` is either a `leaf` containing a `String`…
+    -   …or a `node` containing two `Tree`s
+-   Like defining a Python class where each instance is either a leaf or a branch
+    -   But the compiler enforces that you can't mix the two accidentally
+-   This is why the keyword is `inductive`
+    -   The definition refers to itself: `node` takes two `Tree` arguments
+    -   Like mathematical induction: base cases (`leaf`) and inductive steps (`node`)
+-   `totalLength` uses `match` on the tree shape
+-   Compiler checks that code handles both `leaf` and `node` cases
+    -   Same exhaustiveness guarantee as `match` on lists

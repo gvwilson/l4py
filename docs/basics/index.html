@@ -69,7 +69,6 @@
 </ul>
 </li>
 <li>Assignment uses <code>:=</code></li>
-<li>Again, the Lean compiler executes <code>#eval</code> during compilation</li>
 </ul>
 <h2>Strict Typing</h2>
 <div data-inc="strict_values.lean"><span aria-label="Source: basics/strict_values.lean" class="inc-path" role="img" tabindex="0" title="basics/strict_values.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="kn">def</span><span class="w"> </span><span class="n">nope</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="s2">"two"</span>
@@ -121,7 +120,7 @@ Hint: Type class instance resolution failures can be inspected with the `set_opt
 </div>
 <ul>
 <li>Type of list elements must be declared, and elements must all have the same type<ul>
-<li>Less of a restriction than it first appears</li>
+<li><a href="../types/">Next lesson</a> shows how to handle mixed types</li>
 </ul>
 </li>
 <li>Index from 0</li>
@@ -163,10 +162,7 @@ Hint: Type class instance resolution failures can be inspected with the `set_opt
 <li>So no need for <code>return</code></li>
 </ul>
 </li>
-<li>Note that there <em>aren't</em> parentheses in <code>double 3.0</code><ul>
-<li>Explain why not later</li>
-</ul>
-</li>
+<li>Note that there <em>aren't</em> parentheses in <code>double 3.0</code></li>
 </ul>
 <h2>What's Actually Happening</h2>
 <div data-inc="func_partial.lean"><span aria-label="Source: basics/func_partial.lean" class="inc-path" role="img" tabindex="0" title="basics/func_partial.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="kn">def</span><span class="w"> </span><span class="n">multiply</span><span class="w"> </span><span class="o">(</span><span class="n">left</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="n">right</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="o">:=</span>
@@ -248,7 +244,7 @@ Hint: Type class instance resolution failures can be inspected with the `set_opt
 </div>
 <ul>
 <li>Use <code>match…with</code> for pattern matching</li>
-<li>Each alternative uses<code>|</code> and <code>=&gt;</code></li>
+<li>Each alternative uses <code>|</code> and <code>=&gt;</code></li>
 <li>Use <code>_</code> as a catch-all</li>
 </ul>
 <h2>Recursion</h2>
@@ -309,10 +305,7 @@ Hint: Type class instance resolution failures can be inspected with the `set_opt
 </code></pre></div>
 </div>
 <ul>
-<li>Use <code>let</code> to define intermediate values inside a function<ul>
-<li>Python programmers already do this: <code>pi = 3.14159</code> inside a function body</li>
-</ul>
-</li>
+<li>Use <code>let</code> to define local values</li>
 <li><code>let</code> names are only visible within their enclosing expression</li>
 </ul>
 <h2>Tuples</h2>
@@ -336,7 +329,7 @@ Hint: Type class instance resolution failures can be inspected with the `set_opt
 <ul>
 <li><code>×</code> separates the types of tuple elements (type <code>\times</code> in the editor)</li>
 <li>Use <code>.1</code> and <code>.2</code> to access elements (no, not <code>.0</code>)</li>
-<li>Use <code>let (x, y) := p</code> to name both elements at once</li>
+<li>Use <code>let (x, y) := p</code> to extract both elements at once</li>
 </ul>
 <h2>Missing Values</h2>
 <div data-inc="option_type.lean"><span aria-label="Source: basics/option_type.lean" class="inc-path" role="img" tabindex="0" title="basics/option_type.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="kn">def</span><span class="w"> </span><span class="n">firstElement</span><span class="w"> </span><span class="o">(</span><span class="n">xs</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">Int</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Option</span><span class="w"> </span><span class="n">Int</span><span class="w"> </span><span class="o">:=</span>
@@ -363,7 +356,7 @@ none
 </code></pre></div>
 </div>
 <ul>
-<li>Lean doesn't have <code>None</code>: it uses <code>Option</code> instead</li>
+<li>Lean uses <code>Option</code> instead of <code>None</code></li>
 <li>A function that might not return a value has return type <code>Option SomeType</code></li>
 <li><code>Option.some value</code> wraps a value; <code>Option.none</code> signals absence</li>
 <li>The compiler forces you to handle both cases<ul>
@@ -395,7 +388,7 @@ none
 </div>
 <ul>
 <li><code>structure</code> groups related values under one name<ul>
-<li>Like a Python dataclass or namedtuple</li>
+<li>Like a Python data class or named tuple</li>
 </ul>
 </li>
 <li>Access fields with <code>.fieldName</code></li>
@@ -445,7 +438,7 @@ origin : Point
 </div>
 <ul>
 <li>Lean can often figure out types</li>
-<li>A string literal is always a <code>String</code>, a whole number is usually an <code>Int</code></li>
+<li>A string literal is a <code>String</code>, a whole number is usually an <code>Int</code></li>
 <li>Return types of functions can often be inferred from the body</li>
 <li>You can always add type annotations for clarity, but don't have to</li>
 </ul>

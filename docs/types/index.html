@@ -109,6 +109,57 @@ StringOrInt.num 42
 </li>
 <li>We've already seen a sum type: <code>Option</code> in <a href="../basics/">basics</a> is either <code>some</code> or <code>none</code></li>
 </ul>
+<h2>Trees</h2>
+<div data-inc="binary_tree.lean"><span aria-label="Source: types/binary_tree.lean" class="inc-path" role="img" tabindex="0" title="types/binary_tree.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- A binary tree with strings at the leaves</span>
+<span class="kn">inductive</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="kn">where</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">leaf</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">Tree</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">node</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">Tree</span>
+<span class="n">deriving</span><span class="w"> </span><span class="n">Repr</span>
+
+<span class="c1">-- Build a tree</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">myTree</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Tree</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">Tree</span><span class="bp">.</span><span class="n">node</span>
+<span class="w">    </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">node</span>
+<span class="w">      </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="s2">"alpha"</span><span class="o">)</span>
+<span class="w">      </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="s2">"beta"</span><span class="o">))</span>
+<span class="w">    </span><span class="o">(</span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="s2">"gamma"</span><span class="o">)</span>
+
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">myTree</span>
+
+<span class="c1">-- Calculate total length of all strings in the tree</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">totalLength</span><span class="w"> </span><span class="o">(</span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Tree</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Nat</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="k">match</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">with</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">Tree</span><span class="bp">.</span><span class="n">leaf</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">s</span><span class="bp">.</span><span class="n">length</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">Tree</span><span class="bp">.</span><span class="n">node</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="n">right</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">totalLength</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="n">totalLength</span><span class="w"> </span><span class="n">right</span>
+
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">totalLength</span><span class="w"> </span><span class="n">myTree</span>
+</code></pre></div>
+</div>
+<div data-inc="binary_tree.out"><span aria-label="Source: types/binary_tree.out" class="inc-path" role="img" tabindex="0" title="types/binary_tree.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>Tree.node (Tree.node (Tree.leaf "alpha") (Tree.leaf "beta")) (Tree.leaf "gamma")
+14
+</code></pre></div>
+</div>
+<ul>
+<li><code>inductive</code> can define recursive types, not just flat sums<ul>
+<li><code>Tree</code> is either a <code>leaf</code> containing a <code>String</code>…</li>
+<li>…or a <code>node</code> containing two <code>Tree</code>s</li>
+</ul>
+</li>
+<li>Like defining a Python class where each instance is either a leaf or a branch<ul>
+<li>But the compiler enforces that you can't mix the two accidentally</li>
+</ul>
+</li>
+<li>This is why the keyword is <code>inductive</code><ul>
+<li>The definition refers to itself: <code>node</code> takes two <code>Tree</code> arguments</li>
+<li>Like mathematical induction: base cases (<code>leaf</code>) and inductive steps (<code>node</code>)</li>
+</ul>
+</li>
+<li><code>totalLength</code> uses <code>match</code> on the tree shape</li>
+<li>Compiler checks that code handles both <code>leaf</code> and <code>node</code> cases<ul>
+<li>Same exhaustiveness guarantee as <code>match</code> on lists</li>
+</ul>
+</li>
+</ul>
 </main>
 <footer aria-label="Page navigation">
 <div class="row">

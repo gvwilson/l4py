@@ -20,7 +20,6 @@
 -   Type specified after a colon
     -   `Int` is integer
 -   Assignment uses `:=`
--   Again, the Lean compiler executes `#eval` during compilation
 
 ## Strict Typing
 
@@ -51,7 +50,7 @@
 [%inc simple_lists.out %]
 
 -   Type of list elements must be declared, and elements must all have the same type
-    -   Less of a restriction than it first appears
+    -   [Next lesson](@/types/) shows how to handle mixed types
 -   Index from 0
 -   Use `List.length` to get number of elements
     -   Just like `String.length` earlier
@@ -70,7 +69,6 @@
 -   Result of a function is the value of its last expression
     -   So no need for `return`
 -   Note that there *aren't* parentheses in `double 3.0`
-    -   Explain why not later
 
 ## What's Actually Happening
 
@@ -108,7 +106,7 @@
 [%inc match.out %]
 
 -   Use `match…with` for pattern matching
--   Each alternative uses`|` and `=>`
+-   Each alternative uses `|` and `=>`
 -   Use `_` as a catch-all
 
 ## Recursion
@@ -137,8 +135,7 @@
 [%inc let_binding.lean %]
 [%inc let_binding.out %]
 
--   Use `let` to define intermediate values inside a function
-    -   Python programmers already do this: `pi = 3.14159` inside a function body
+-   Use `let` to define local values
 -   `let` names are only visible within their enclosing expression
 
 ## Tuples
@@ -148,14 +145,14 @@
 
 -   `×` separates the types of tuple elements (type `\times` in the editor)
 -   Use `.1` and `.2` to access elements (no, not `.0`)
--   Use `let (x, y) := p` to name both elements at once
+-   Use `let (x, y) := p` to extract both elements at once
 
 ## Missing Values
 
 [%inc option_type.lean %]
 [%inc option_type.out %]
 
--   Lean doesn't have `None`: it uses `Option` instead
+-   Lean uses `Option` instead of `None`
 -   A function that might not return a value has return type `Option SomeType`
 -   `Option.some value` wraps a value; `Option.none` signals absence
 -   The compiler forces you to handle both cases
@@ -167,7 +164,7 @@
 [%inc simple_struct.out %]
 
 -   `structure` groups related values under one name
-    -   Like a Python dataclass or namedtuple
+    -   Like a Python data class or named tuple
 -   Access fields with `.fieldName`
 -   Create a value by listing field names with `:=` inside `{}`
 
@@ -185,7 +182,7 @@
 [%inc type_inference.out %]
 
 -   Lean can often figure out types
--   A string literal is always a `String`, a whole number is usually an `Int`
+-   A string literal is a `String`, a whole number is usually an `Int`
 -   Return types of functions can often be inferred from the body
 -   You can always add type annotations for clarity, but don't have to
 
