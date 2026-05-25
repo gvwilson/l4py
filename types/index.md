@@ -196,3 +196,152 @@
     -   `Cmd.say msg` prints a message
 -   `run` is an interpreter: pattern matching plus recursion over the command list
 -   This is the payoff: define your data shapes with `inductive`, then process them with `match`
+
+<div class="exercise" markdown="1">
+
+## Exercises
+
+### Fix: Missing Constructor in Match
+
+[%inc ex_bug_sum_match.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The `describe` function only handles `StringOrInt.str` but not `StringOrInt.num`
+-   Add a branch for the `num` constructor that formats the integer value
+
+</details>
+
+### Fix: Missing `deriving` Clause
+
+[%inc ex_bug_deriving.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `Color` is missing a `deriving` clause
+-   The `==` operator needs a `BEq` instance to compare values
+-   Add `deriving BEq` (and `Repr` wouldn't hurt) to the `inductive` line
+
+</details>
+
+### Fix: Missing Base Case in Recursion
+
+[%inc ex_bug_tree.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `totalSum` handles `IntTree.node` but not `IntTree.leaf`
+-   The compiler rejects incomplete pattern matches on inductive types
+-   Add a branch for `IntTree.leaf n` that returns `n`
+
+</details>
+
+### Fix: Unhandled Error Case
+
+[%inc ex_bug_result.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `describe` only matches `Result.ok` but not `Result.err`
+-   The compiler checks that every constructor of a sum type is handled
+-   Add a branch for `Result.err msg` that formats the error message
+
+</details>
+
+### Fix: Missing Case in `eval`
+
+[%inc ex_bug_expr.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `eval` handles `Expr.num` and `Expr.add` but not `Expr.mul`
+-   The compiler reports which constructors are missing
+-   Add a line for `Expr.mul l r` that calls `eval` on both sides and multiplies
+
+</details>
+
+### Fix: Wrong Return Type
+
+[%inc ex_bug_type_param.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The `countLeaves` function body returns `Nat` values (`1`, `+` on `Nat`)
+-   But the type annotation says `String`
+-   Fix the return type annotation to match what the body actually computes
+
+</details>
+
+### Write: Weekday or Weekend
+
+[%inc ex_days.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `match` on the `Day` argument to check which day it is
+-   Return `true` for `Day.saturday` and `Day.sunday`, `false` for everything else
+-   Use `_` as a catch-all for the five weekdays to keep the code short
+
+</details>
+
+### Write: Tree Height
+
+[%inc ex_tree_height.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `match t with` to handle the two constructors: `Tree.leaf` and `Tree.node`
+-   A leaf has height `0`; a node's height is `1` plus the larger of its children
+-   Use `Nat.max` to compare two `Nat` values
+
+</details>
+
+### Write: Map from Scratch
+
+[%inc ex_list_map.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `match` on the list with the inductive constructors: `List.nil` and `List.cons`
+-   `List.nil` is the empty list; `List.cons h t` puts element `h` at the front of list `t`
+-   In the `cons` case, apply `f` to the head and recurse on the tail
+
+</details>
+
+### Write: Safe Division
+
+[%inc ex_safe_div.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Check if `b` is zero using an `if`/`else` expression
+-   Return `Option.none` when `b == 0`, `Option.some (a / b)` otherwise
+-   This is like Python's `None` but the compiler forces callers to handle it
+
+</details>
+
+### Write: Mirror a Tree
+
+[%inc ex_mirror_tree.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `match t with` to distinguish `Tree.leaf` from `Tree.node`
+-   A leaf is unchanged: return it as-is
+-   For a node, create a new node with left and right subtrees swapped using recursion
+
+</details>
+
+### Write: Get or Else
+
+[%inc ex_get_or_else.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `match opt with` to handle `Option.some` and `Option.none`
+-   `Option.some val` means return `val` (ignore the default)
+-   `Option.none` means return the `default` argument
+
+</details>
+
+</div>
