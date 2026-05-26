@@ -46,6 +46,7 @@ brand = "L4Py"
 skips = [
     "*.lean",
     "*.out",
+    "*.sh",
     "*~",
     "bin/**",
     "docs/**",
