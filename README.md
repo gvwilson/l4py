@@ -10,6 +10,7 @@
 1.  [Introduction](@/intro/)
 1.  [Basics](@/basics/)
 1.  [Types](@/types/)
+1.  [I/O and Monads](@/io/)
 1.  [Conclusion](@/finale/)
 
 </div>

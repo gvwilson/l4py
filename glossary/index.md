@@ -12,7 +12,15 @@
 
 ## E
 
+<span id="effectful">effectful</span>
+:   FIXME
+
 <span id="enumeration">enumeration</span>
+:   FIXME
+
+## M
+
+<span id="monad">monad</span>
 :   FIXME
 
 ## P

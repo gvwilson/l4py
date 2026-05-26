@@ -41,3 +41,14 @@ Add 3–4 more sections (~20 min) to reach one hour:
 - Vector α n — lists that know their length
 - Fin n — bounded numbers
 - Why types depending on values eliminates bugs
+
+---
+
+### To Do
+
+Types revealed that `Option` and `List` are inductive types.
+IO could reveal that `IO` is also an inductive type, or that `do` desugars
+to `bind` calls.  Even a one-sentence note — "Behind the scenes, `do` and
+`←` desugar to function calls just like the `match` expressions in the
+Types lesson" — would create continuity.
+
