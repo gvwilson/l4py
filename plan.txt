@@ -1,34 +1,5 @@
 # L4PY Lesson Plan
 
-## Completed
-- Lesson 1: Intro — stub
-- Lesson 2: Basics — complete (18 sections: #eval, def, types, #guard,
-  strings, lists, functions, currying, conditionals, match, recursion,
-  map/filter/fold, let, tuples, Option, structure, #check, idiomatic Lean)
-- Lesson 3: Types — 3 sections done (sum types, recursive types, polymorphism)
-
-## Proposed Lessons 3–8 (one hour each, including exercises)
-
-### Lesson 3: Types (complete current chapter)
-
-Add 3–4 more sections (~20 min) to reach one hour:
-- Type classes (deriving, BEq, ToString, Repr, Inhabited)
-- Nested patterns (matching on sums-of-products, match guards)
-- Common List operations (range, zip, concat, take, drop)
-
-### Lesson 4: Functional Pipelines
-
-- |> forward pipeline
-- Function composition (∘)
-- Point-free style
-- Filter-map-fold chains vs imperative loops
-
-### Lesson 5: Monads and IO
-
-- Chaining Option with bind
-- do notation
-- IO type: the real world
-
 ### Lesson 6: Logic and Proofs
 
 - Propositions as types (Curry-Howard basics)

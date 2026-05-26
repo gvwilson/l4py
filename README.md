@@ -10,7 +10,9 @@
 1.  [Introduction](@/intro/)
 1.  [Basics](@/basics/)
 1.  [Types](@/types/)
+1.  [Functional Pipelines](@/pipes/)
 1.  [I/O and Monads](@/io/)
+1.  [A File Archiver](@/archive/)
 1.  [Conclusion](@/finale/)
 
 </div>

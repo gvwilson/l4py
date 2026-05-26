@@ -1,5 +1,14 @@
 # Types
 
+<div class="callout" markdown="1">
+
+-   Define custom sum types with `inductive` and pattern match on their constructors
+-   Build recursive data structures like trees and expression languages
+-   Use type parameters to write generic, reusable type definitions
+-   Understand how `Option` and `List` are built from these same primitives
+
+</div>
+
 -   A structure is a [%g product_type "product type" %]
     -   Possible values are the cross-product of the values of the first field
         with the values of the second field, etc.

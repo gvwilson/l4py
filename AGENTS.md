@@ -20,8 +20,11 @@ are assumed.
 |------------|-----------|-------------|
 | Intro      | `intro/`  | Stub — one line, links to Christiansen2023 |
 | Basics     | `basics/` | **Complete** — 14 sections, 22 `.lean` files + matching `.out` files |
-| Types      | `types/`  | In progress — one section (sum types), one `.lean` file |
-| Conclusion | `finale/` | Stub — empty |
+| Types      | `types/`  | **Complete** — 16 sections, 31 `.lean` files |
+| Pipes      | `pipes/`   | **Complete** — 12 sections, 11 `.lean` files + 12 exercise `.lean` files |
+| IO         | `io/`      | In progress |
+| Archive    | `archive/` | **Complete** — capstone: content-addressable file archiver |
+| Conclusion | `finale/`  | Stub — empty |
 
 ## Lesson Structure & Style
 

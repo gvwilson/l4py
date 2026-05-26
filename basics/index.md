@@ -1,5 +1,14 @@
 # Basics
 
+<div class="callout" markdown="1">
+
+-   Write and run simple Lean programs using `#eval` and `def`
+-   Work with basic types: `Int`, `Float`, `String`, and `List`
+-   Define functions, use pattern matching with `match`, and recurse over lists
+-   Handle missing values with `Option` and group related data with `structure`
+
+</div>
+
 -   We have to start somewhere
 
 ## Add Numbers

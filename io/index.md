@@ -1,5 +1,14 @@
 # I/O and Monads
 
+<div class="callout" markdown="1">
+
+-   Understand the `IO` type and how Lean separates pure computation from side effects
+-   Sequence IO actions with `do` blocks and `←` (left arrow)
+-   Capture results from IO actions and chain them into larger programs
+-   Read from standard input and print to standard output
+
+</div>
+
 -   Every program eventually has to talk to the world
 
 ## What Is IO? (And What Is a Monad?)

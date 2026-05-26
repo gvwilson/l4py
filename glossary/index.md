@@ -2,6 +2,9 @@
 
 ## C
 
+<span id="content_addressable">content-addressable</span>
+:   FIXME
+
 <span id="currying">currying</span>
 :   FIXME
 
@@ -24,6 +27,9 @@
 :   FIXME
 
 ## P
+
+<span id="prelude">prelude</span>
+:   FIXME
 
 <span id="product_type">product type</span>
 :   FIXME

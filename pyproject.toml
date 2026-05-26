@@ -10,7 +10,7 @@ dependencies = [
 
 [tool.taskipy.tasks.regen]
 help = "Regenerate .out files from .lean files."
-cmd = "python bin/regenerate.py basics types io"
+cmd = "python bin/regenerate.py basics types pipes io archive"
 
 [tool.taskipy.tasks.bib]
 help = "Check bibliography entries."
