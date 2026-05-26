@@ -34,6 +34,9 @@
 <span id="product_type">product type</span>
 :   FIXME
 
+<span id="pure">pure</span>
+:   FIXME
+
 ## R
 
 <span id="repl">REPL</span>
@@ -50,6 +53,9 @@
 ## T
 
 <span id="tagged_union">tagged union</span>
+:   FIXME
+
+<span id="type_alias">type alias</span>
 :   FIXME
 
 <span id="type_parameter">type parameter</span>

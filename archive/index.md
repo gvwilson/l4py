@@ -13,6 +13,7 @@
     -   Two files with the same content get the same address
     -   Like Git's `.git/objects` directory
 -   We'll build it in layers: types first, then pure logic, then I/O
+-   See the [JavaScript][sdxjs-archive] and [Python][sdxpy-archive] versions for comparison
 
 ## Type Aliases
 
@@ -33,7 +34,7 @@
 [%inc archive.lean mark=hash-bytes %]
 
 -   `hashBytes` takes a `ByteArray` and returns a 16-character hex `Hash`
--   `hash ba` is Lean's built-in structural hash function
+-   `hash` is Lean's built-in structural hash function
     -   Returns a `UInt64` (unsigned 64-bit integer)
     -   A real archiver would use SHA-256, but this is good enough for teaching
 -   The body formats the `UInt64` into hex by extracting each 4-bit nibble
@@ -141,28 +142,16 @@
 ### Compiling and Running
 
 -   To compile (check types, run `#eval` and `#guard`):
-    ```sh
-    lake env lean archive/archive.lean
-    ```
+    -   `lake env lean archive/archive.lean`
     -   This is what we've been doing all along
     -   The `#guard` tests run at compile time
     -   `main` is not executed: it's just type-checked
 -   To run the program (execute `main`):
-    ```sh
-    lean --run archive/archive.lean
-    ```
+    -   `lean --run archive/archive.lean`
     -   This compiles the file and calls the `main` function
-    -   Like Python's `python archive/archive.py`
-    -   Output:
-    ```txt
-    Snapshotting to archive-dir/
-    Created 3 manifest entries
-    Restoring files...
-    Done.
-    ```
 -   After running, check the results:
     -   `ls archive-dir/` shows the `.bck` blob files
-	-   Two files, because `a.txt` and `b.txt` are deduplicated
+    -   Two files, because `a.txt` and `b.txt` are deduplicated
     -   `cat a.txt`, `cat b.txt`, `cat c.txt` show the restored content in the current directory
 -   The two commands serve different purposes:
     -   `lake env lean` for development: type-check and test

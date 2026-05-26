@@ -57,6 +57,7 @@
 </ul>
 </li>
 <li>We'll build it in layers: types first, then pure logic, then I/O</li>
+<li>See the <a href="https://third-bit.com/sdxjs/backup/">JavaScript</a> and <a href="https://third-bit.com/sdxpy/archive/">Python</a> versions for comparison</li>
 </ul>
 <h2>Type Aliases</h2>
 <div data-inc="archive.lean" data-mark="hash-abbrev"><span aria-label="Source: archive/archive.lean" class="inc-path" role="img" tabindex="0" title="archive/archive.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- A content address is just a hex string of the hash</span>
@@ -92,7 +93,7 @@
 </div>
 <ul>
 <li><code>hashBytes</code> takes a <code>ByteArray</code> and returns a 16-character hex <code>Hash</code></li>
-<li><code>hash ba</code> is Lean's built-in structural hash function<ul>
+<li><code>hash</code> is Lean's built-in structural hash function<ul>
 <li>Returns a <code>UInt64</code> (unsigned 64-bit integer)</li>
 <li>A real archiver would use SHA-256, but this is good enough for teaching</li>
 </ul>
@@ -293,25 +294,16 @@
 </ul>
 <h3>Compiling and Running</h3>
 <ul>
-<li>To compile (check types, run <code>#eval</code> and <code>#guard</code>):
-    <code>sh
-    lake env lean archive/archive.lean</code><ul>
+<li>To compile (check types, run <code>#eval</code> and <code>#guard</code>):<ul>
+<li><code>lake env lean archive/archive.lean</code></li>
 <li>This is what we've been doing all along</li>
 <li>The <code>#guard</code> tests run at compile time</li>
 <li><code>main</code> is not executed: it's just type-checked</li>
 </ul>
 </li>
-<li>To run the program (execute <code>main</code>):
-    <code>sh
-    lean --run archive/archive.lean</code><ul>
+<li>To run the program (execute <code>main</code>):<ul>
+<li><code>lean --run archive/archive.lean</code></li>
 <li>This compiles the file and calls the <code>main</code> function</li>
-<li>Like Python's <code>python archive/archive.py</code></li>
-<li>Output:
-<code>txt
-Snapshotting to archive-dir/
-Created 3 manifest entries
-Restoring files...
-Done.</code></li>
 </ul>
 </li>
 <li>After running, check the results:<ul>
