@@ -113,17 +113,6 @@
     -   `let x := expr` is a pure expression, no IO
     -   `let x ← action` is an I/O action, captures its result
 
-## Chaining IO Actions
-
-[%inc chain_io.lean %]
-[%inc chain_io.out %]
-
--   `do` blocks compose naturally: you can chain as many `←` binds as you need
--   Each `←` runs the action and captures its result for the next step
--   Here `getLine` is called twice: once for the first name, once for the last name
-    -   Both captures are combined in a single `IO.println`
--   Like writing multiple `await` calls in one `async` function
-
 ## Reading Input
 
 [%inc read_input.lean %]
@@ -139,6 +128,17 @@
     -   The compiler claims stdin for its own use, so `stdin.getLine` returns an empty string
     -   This is a limitation of `#eval`, not of Lean's IO system
     -   In the next lesson we will compile and run programs as proper executables, where stdin works correctly
+
+## Chaining IO Actions
+
+[%inc chain_io.lean %]
+[%inc chain_io.out %]
+
+-   `do` blocks compose naturally: you can chain as many `←` binds as you need
+-   Each `←` runs the action and captures its result for the next step
+-   Here `getLine` is called twice: once for the first name, once for the last name
+    -   Both captures are combined in a single `IO.println`
+-   Like writing multiple `await` calls in one `async` function
 
 ## Summary
 
