@@ -1,0 +1,2 @@
+-- Write: add a main function that prints "Hello, Lake!"
+-- def main : IO Unit := ???

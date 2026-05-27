@@ -13,6 +13,8 @@
 1.  [Functional Pipelines](@/pipes/)
 1.  [I/O and Monads](@/io/)
 1.  [A File Archiver](@/archive/)
+1.  [Building Projects](@/build/)
+1.  [Proofs](@/proof/)
 1.  [Conclusion](@/finale/)
 
 </div>

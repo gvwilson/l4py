@@ -46,7 +46,6 @@ are assumed.
 ### Code style
 
 - Every `.lean` file is a standalone, self-contained example — typically 3-10 lines.
-- No `import` statements; all examples use only the Lean prelude.
 - Code is clean and minimal:
   - `def` for definitions, `:=` for assignment
   - `#eval` to print results at compile time
