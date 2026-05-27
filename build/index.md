@@ -12,6 +12,7 @@
 
 -   So far we have run Lean files one at a time
 -   Real projects have multiple files, dependencies, and build steps
+-   DEBT: explain doc comments
 
 ## Single-File Programs
 

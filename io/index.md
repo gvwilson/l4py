@@ -62,7 +62,6 @@
 ## Forgetting `do`
 
 [%inc ex_missing_do.lean %]
-[%inc ex_missing_do.out %]
 
 -   Forgetting `do` is the most common IO mistake
 -   Without `do`, Lean tries to use the second `IO.println` as an argument to the first
@@ -158,7 +157,6 @@
 ### Fix: Missing `do`
 
 [%inc ex_bug_no_do.lean %]
-[%inc ex_bug_no_do.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -170,7 +168,6 @@
 ### Fix: Wrong Left Arrow
 
 [%inc ex_bug_let_bind.lean %]
-[%inc ex_bug_let_bind.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -182,7 +179,6 @@
 ### Fix: Missing `return`
 
 [%inc ex_bug_return.lean %]
-[%inc ex_bug_return.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -194,7 +190,6 @@
 ### Fix: Wrong Return Type
 
 [%inc ex_bug_return_type.lean %]
-[%inc ex_bug_return_type.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -206,7 +201,6 @@
 ### Fix: Arrow on a Pure Expression
 
 [%inc ex_bug_arrow.lean %]
-[%inc ex_bug_arrow.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -218,7 +212,6 @@
 ### Fix: Silently Discarded IO Action
 
 [%inc ex_bug_discard.lean %]
-[%inc ex_bug_discard.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -231,7 +224,6 @@
 ### Write: Two-Line Greeting
 
 [%inc ex_hello.lean %]
-[%inc ex_hello.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -244,7 +236,6 @@
 ### Write: Print in Uppercase
 
 [%inc ex_shout.lean %]
-[%inc ex_shout.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -259,7 +250,6 @@
 -   Use `++` to concatenate strings
 
 [%inc ex_build_msg.lean %]
-[%inc ex_build_msg.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -272,7 +262,6 @@
 ### Write: Use a Pure Function in IO
 
 [%inc ex_pure_io.lean %]
-[%inc ex_pure_io.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -285,7 +274,6 @@
 ### Write: Repeat Three Times
 
 [%inc ex_repeat.lean %]
-[%inc ex_repeat.out %]
 
 <details markdown="1"><summary>hint</summary>
 
@@ -298,7 +286,6 @@
 ### Write: Read and Greet
 
 [%inc ex_read_greet.lean %]
-[%inc ex_read_greet.out %]
 
 <details markdown="1"><summary>hint</summary>
 

@@ -15,6 +15,7 @@
 1.  [A File Archiver](@/archive/)
 1.  [Building Projects](@/build/)
 1.  [Proofs](@/proof/)
+1.  [Binary Data](@/binary/)
 1.  [Conclusion](@/finale/)
 
 </div>

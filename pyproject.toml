@@ -10,7 +10,7 @@ dependencies = [
 
 [tool.taskipy.tasks.regen]
 help = "Regenerate .out files from .lean files."
-cmd = "python bin/regenerate.py basics types pipes io archive"
+cmd = "python bin/regenerate.py basics types pipes io archive build proof binary"
 
 [tool.taskipy.tasks.bib]
 help = "Check bibliography entries."
@@ -44,10 +44,12 @@ cmd = """
 [tool.mccole]
 brand = "L4Py"
 skips = [
+    "*.json",
     "*.lean",
     "*.out",
     "*.sh",
     "*~",
+    ".lake/**",
     "bin/**",
     "docs/**",
     "uv.lock"
