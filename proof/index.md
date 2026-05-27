@@ -196,7 +196,6 @@
 ## Why This Matters
 
 [%inc check_proof.lean %]
-[%inc check_proof.out %]
 
 -   Lean's proof tactics can verify invariants at compile time, catching bugs before they reach runtime
 -   `omega` proves that arithmetic stays within safe bounds given input constraints
