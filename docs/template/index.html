@@ -29,8 +29,9 @@
 <li><a class="active" href="../template/">A Template Expander</a></li>
 <li><a href="../db/">A Database</a></li>
 <li><a href="../build/">Building Projects</a></li>
-<li><a href="../proof/">Proofs</a></li>
 <li><a href="../binary/">Binary Data</a></li>
+<li><a href="../proof/">Proofs</a></li>
+<li><a href="../advanced/">Type Classes</a></li>
 <li><a href="../finale/">Conclusion</a></li>
 </ul>
 </div>
@@ -57,7 +58,7 @@
 </ul>
 </div>
 <ul>
-<li>Template engines like [Jinja][jinja] or [Mustache][mustache] fill in placeholders with data</li>
+<li>Template engines like <a href="https://jinja.palletsprojects.com/">Jinja</a> and <a href="https://mustache.github.io/">Mustache</a> fill in placeholders with data</li>
 <li>We'll build a minimal engine that supports variables, loops, and conditionals</li>
 </ul>
 <h2>Template Values</h2>
@@ -71,7 +72,10 @@
 <ul>
 <li><code>TVal</code> is a sum type for values in the template context</li>
 <li><code>TVal.Str s</code> holds a plain string</li>
-<li><code>TVal.List items</code> holds a list of contexts (one per loop iteration)</li>
+<li><code>TVal.List items</code> holds a list of contexts, one per loop iteration<ul>
+<li>Each inner list is itself a <code>Context</code> (a list of <code>(name, value)</code> pairs) for that iteration</li>
+</ul>
+</li>
 </ul>
 <h2>Context</h2>
 <div data-inc="code.lean" data-mark="context"><span aria-label="Source: template/code.lean" class="inc-path" role="img" tabindex="0" title="template/code.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- A context maps variable names to template values</span>
@@ -164,7 +168,7 @@
 <li><code>TText</code>: output the string directly</li>
 <li><code>TVar</code>: look up the variable; output its string value (or <code>""</code> if not found)</li>
 <li><code>TLoop</code>: for each item in the list variable, expand the body with that item's context pushed on top</li>
-<li><code>TIf</code>: check the variable; non-empty string or non-empty list → then branch, otherwise → else branch</li>
+<li><code>TIf</code>: check the variable; a non-empty <code>Str</code> or non-empty <code>List</code> is truthy → then branch; empty or missing → else branch</li>
 <li><code>TSeq</code>: expand all child nodes and concatenate results with <code>++</code></li>
 </ul>
 </li>
@@ -265,6 +269,132 @@
 <div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="nt">&lt;h1&gt;</span>Welcome,<span class="w"> </span>Alice!<span class="nt">&lt;/h1&gt;</span>
 <span class="nt">&lt;p&gt;</span>You<span class="w"> </span>have<span class="w"> </span>3<span class="w"> </span>items.<span class="nt">&lt;/p&gt;</span>
 </code></pre></div>
+<h2>A HashMap Context</h2>
+<div data-inc="code_map.lean" data-mark="hash-ctx"><span aria-label="Source: template/code_map.lean" class="inc-path" role="img" tabindex="0" title="template/code_map.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- A HashMap context: O(1) lookup keyed by variable name</span>
+<span class="kn">abbrev</span><span class="w"> </span><span class="n">HashCtx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">HashMap</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">TVal</span>
+</code></pre></div>
+</div>
+<ul>
+<li><code>HashMap String TVal</code> maps variable names directly to values<ul>
+<li>Lookup is O(1) instead of O(n) scan down the association list</li>
+<li>From the <code>Batteries</code> library: <code>import Batteries</code> and <code>open Std</code> are required</li>
+</ul>
+</li>
+<li><code>ctx[name]?</code> returns <code>Option TVal</code> — same return type as the list version</li>
+<li>The change is entirely inside <code>HashCtx</code> and <code>ctxGet</code>: nothing else in the engine needs to know</li>
+</ul>
+<div data-inc="code_map.lean" data-mark="ctx-get-map"><span aria-label="Source: template/code_map.lean" class="inc-path" role="img" tabindex="0" title="template/code_map.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- O(1) lookup: index directly into the HashMap</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">ctxGet</span><span class="w"> </span><span class="o">(</span><span class="n">ctx</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HashCtx</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="n">name</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Option</span><span class="w"> </span><span class="n">TVal</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">ctx</span><span class="o">[</span><span class="n">name</span><span class="o">]?</span>
+</code></pre></div>
+</div>
+<ul>
+<li><code>ctx[name]?</code> is HashMap's subscript operator — equivalent to <code>HashMap.getElem? ctx name</code><ul>
+<li>Like Python's <code>ctx.get(name)</code> on a dict</li>
+</ul>
+</li>
+</ul>
+<h2>What Stays the Same</h2>
+<div data-inc="code_map.lean" data-mark="tnode-map"><span aria-label="Source: template/code_map.lean" class="inc-path" role="img" tabindex="0" title="template/code_map.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Same template AST as the association-list version — unchanged</span>
+<span class="kn">inductive</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="kn">where</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TText</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TVar</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TLoop</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TIf</span><span class="w">   </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TSeq</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">TNode</span>
+<span class="w">  </span><span class="n">deriving</span><span class="w"> </span><span class="n">Repr</span>
+</code></pre></div>
+</div>
+<ul>
+<li><code>TNode</code> is unchanged — it describes template <em>syntax</em>, not how context is stored</li>
+<li><code>expand</code> is also unchanged in structure: it calls <code>ctxGet</code> and recurses on nodes</li>
+</ul>
+<div data-inc="code_map.lean" data-mark="expand-map"><span aria-label="Source: template/code_map.lean" class="inc-path" role="img" tabindex="0" title="template/code_map.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- expand is structurally identical to the list version;</span>
+<span class="c1">-- only the Context type and ctxGet implementation differ</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="o">(</span><span class="n">ctx</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HashCtx</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="bp">→</span><span class="w"> </span><span class="n">String</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="n">s</span><span class="w">     </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">s</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TVar</span><span class="w"> </span><span class="n">name</span><span class="w">   </span><span class="bp">=&gt;</span>
+<span class="w">      </span><span class="k">match</span><span class="w"> </span><span class="n">ctxGet</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">with</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="o">(</span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="n">s</span><span class="o">)</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">s</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="bp">_</span><span class="w">                 </span><span class="bp">=&gt;</span><span class="w"> </span><span class="s2">""</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TLoop</span><span class="w"> </span><span class="n">listName</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="bp">=&gt;</span>
+<span class="w">      </span><span class="k">match</span><span class="w"> </span><span class="n">ctxGet</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">listName</span><span class="w"> </span><span class="k">with</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="o">(</span><span class="n">TVal</span><span class="bp">.</span><span class="n">List</span><span class="w"> </span><span class="n">items</span><span class="o">)</span><span class="w"> </span><span class="bp">=&gt;</span>
+<span class="w">          </span><span class="n">items</span><span class="bp">.</span><span class="n">foldl</span><span class="w"> </span><span class="o">(</span><span class="n">init</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s2">""</span><span class="o">)</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="n">itemCtx</span><span class="w"> </span><span class="bp">=&gt;</span>
+<span class="w">            </span><span class="c1">-- merge loop-iteration variables on top of outer context</span>
+<span class="w">            </span><span class="k">let</span><span class="w"> </span><span class="n">inner</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">itemCtx</span><span class="bp">.</span><span class="n">foldl</span><span class="w"> </span><span class="o">(</span><span class="k">fun</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">(</span><span class="n">k</span><span class="o">,</span><span class="w"> </span><span class="n">v</span><span class="o">)</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">m</span><span class="bp">.</span><span class="n">insert</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="n">v</span><span class="o">)</span><span class="w"> </span><span class="n">ctx</span>
+<span class="w">            </span><span class="n">acc</span><span class="w"> </span><span class="bp">++</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">inner</span><span class="w"> </span><span class="n">body</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="bp">_</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="s2">""</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TIf</span><span class="w"> </span><span class="n">varName</span><span class="w"> </span><span class="n">thenNode</span><span class="w"> </span><span class="n">elseNode</span><span class="w"> </span><span class="bp">=&gt;</span>
+<span class="w">      </span><span class="k">match</span><span class="w"> </span><span class="n">ctxGet</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">varName</span><span class="w"> </span><span class="k">with</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="o">(</span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="n">s</span><span class="o">)</span><span class="w">  </span><span class="bp">=&gt;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">s</span><span class="bp">.</span><span class="n">isEmpty</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">elseNode</span>
+<span class="w">                              </span><span class="k">else</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">thenNode</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="n">some</span><span class="w"> </span><span class="o">(</span><span class="n">TVal</span><span class="bp">.</span><span class="n">List</span><span class="w"> </span><span class="n">l</span><span class="o">)</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">l</span><span class="bp">.</span><span class="n">isEmpty</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">elseNode</span>
+<span class="w">                              </span><span class="k">else</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">thenNode</span>
+<span class="w">      </span><span class="bp">|</span><span class="w"> </span><span class="n">none</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">elseNode</span>
+<span class="w">  </span><span class="bp">|</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TSeq</span><span class="w"> </span><span class="n">nodes</span><span class="w">  </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">nodes</span><span class="bp">.</span><span class="n">foldl</span><span class="w"> </span><span class="o">(</span><span class="n">init</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s2">""</span><span class="o">)</span><span class="w"> </span><span class="k">fun</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="bp">=&gt;</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="bp">++</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">n</span>
+</code></pre></div>
+</div>
+<ul>
+<li>The only difference in <code>expand</code> is the loop case: merging an item's context into the HashMap<ul>
+<li><code>itemCtx.foldl (fun m (k, v) =&gt; m.insert k v) ctx</code> inserts the loop variables on top</li>
+<li>Instead of <code>itemCtx ++ ctx</code> (list prepend), we fold-insert into the parent map</li>
+</ul>
+</li>
+<li>Every other branch is structurally identical to the association-list version</li>
+<li>This is <a class="gl-ref" href="../glossary/#encapsulation">encapsulation</a> in practice: <code>TNode</code> and the core of <code>expand</code> are
+    stable; only the context <em>implementation</em> changed</li>
+</ul>
+<h2>Running the HashMap Version</h2>
+<div data-inc="code_map.lean" data-mark="tests-map"><span aria-label="Source: template/code_map.lean" class="inc-path" role="img" tabindex="0" title="template/code_map.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- The same tests pass with the new context type</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">helloTmpl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TSeq</span><span class="w"> </span><span class="o">[</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"Hello, "</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TVar</span><span class="w"> </span><span class="s2">"name"</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"!"</span><span class="o">]</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="o">(</span><span class="n">HashMap</span><span class="bp">.</span><span class="n">ofList</span><span class="w"> </span><span class="o">[(</span><span class="s2">"name"</span><span class="o">,</span><span class="w"> </span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="s2">"World"</span><span class="o">)])</span><span class="w"> </span><span class="n">helloTmpl</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="s2">"Hello, World!"</span>
+
+<span class="kn">def</span><span class="w"> </span><span class="n">listTmpl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">  </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TSeq</span><span class="w"> </span><span class="o">[</span>
+<span class="w">    </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"&lt;ul&gt;"</span><span class="o">,</span>
+<span class="w">    </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TLoop</span><span class="w"> </span><span class="s2">"items"</span>
+<span class="w">      </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TSeq</span><span class="w"> </span><span class="o">[</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"&lt;li&gt;"</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TVar</span><span class="w"> </span><span class="s2">"x"</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"&lt;/li&gt;"</span><span class="o">]),</span>
+<span class="w">    </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"&lt;/ul&gt;"</span>
+<span class="w">  </span><span class="o">]</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">expand</span>
+<span class="w">    </span><span class="o">(</span><span class="n">HashMap</span><span class="bp">.</span><span class="n">ofList</span><span class="w"> </span><span class="o">[(</span><span class="s2">"items"</span><span class="o">,</span><span class="w"> </span><span class="n">TVal</span><span class="bp">.</span><span class="n">List</span>
+<span class="w">      </span><span class="o">[[(</span><span class="s2">"x"</span><span class="o">,</span><span class="w"> </span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="s2">"apples"</span><span class="o">)],</span><span class="w"> </span><span class="o">[(</span><span class="s2">"x"</span><span class="o">,</span><span class="w"> </span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="s2">"bananas"</span><span class="o">)]])])</span>
+<span class="w">    </span><span class="n">listTmpl</span>
+<span class="w">  </span><span class="bp">==</span><span class="w"> </span><span class="s2">"&lt;ul&gt;&lt;li&gt;apples&lt;/li&gt;&lt;li&gt;bananas&lt;/li&gt;&lt;/ul&gt;"</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="o">(</span><span class="n">HashMap</span><span class="bp">.</span><span class="n">ofList</span><span class="w"> </span><span class="o">[(</span><span class="s2">"show"</span><span class="o">,</span><span class="w"> </span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="s2">"yes"</span><span class="o">)])</span>
+<span class="w">    </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TIf</span><span class="w"> </span><span class="s2">"show"</span><span class="w"> </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"visible"</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"hidden"</span><span class="o">))</span>
+<span class="w">  </span><span class="bp">==</span><span class="w"> </span><span class="s2">"visible"</span>
+
+<span class="bp">#</span><span class="n">guard</span><span class="w"> </span><span class="n">expand</span><span class="w"> </span><span class="o">({}</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HashCtx</span><span class="o">)</span>
+<span class="w">    </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TIf</span><span class="w"> </span><span class="s2">"show"</span><span class="w"> </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"visible"</span><span class="o">)</span><span class="w"> </span><span class="o">(</span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"hidden"</span><span class="o">))</span>
+<span class="w">  </span><span class="bp">==</span><span class="w"> </span><span class="s2">"hidden"</span>
+</code></pre></div>
+</div>
+<div data-inc="code_map.lean" data-mark="main-map"><span aria-label="Source: template/code_map.lean" class="inc-path" role="img" tabindex="0" title="template/code_map.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="kn">def</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">IO</span><span class="w"> </span><span class="n">Unit</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">HashCtx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">HashMap</span><span class="bp">.</span><span class="n">ofList</span><span class="w"> </span><span class="o">[</span>
+<span class="w">    </span><span class="o">(</span><span class="s2">"user"</span><span class="o">,</span><span class="w">  </span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="s2">"Alice"</span><span class="o">),</span>
+<span class="w">    </span><span class="o">(</span><span class="s2">"count"</span><span class="o">,</span><span class="w"> </span><span class="n">TVal</span><span class="bp">.</span><span class="n">Str</span><span class="w"> </span><span class="s2">"3"</span><span class="o">)</span>
+<span class="w">  </span><span class="o">]</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">tmpl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">TNode</span><span class="w"> </span><span class="o">:=</span>
+<span class="w">    </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TSeq</span><span class="w"> </span><span class="o">[</span>
+<span class="w">      </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"&lt;h1&gt;Welcome, "</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TVar</span><span class="w"> </span><span class="s2">"user"</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"!&lt;/h1&gt;</span><span class="se">\n</span><span class="s2">"</span><span class="o">,</span>
+<span class="w">      </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">"&lt;p&gt;You have "</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TVar</span><span class="w"> </span><span class="s2">"count"</span><span class="o">,</span><span class="w"> </span><span class="n">TNode</span><span class="bp">.</span><span class="n">TText</span><span class="w"> </span><span class="s2">" items.&lt;/p&gt;"</span>
+<span class="w">    </span><span class="o">]</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="o">(</span><span class="n">expand</span><span class="w"> </span><span class="n">ctx</span><span class="w"> </span><span class="n">tmpl</span><span class="o">)</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="s2">"Done."</span>
+</code></pre></div>
+</div>
+<ul>
+<li>The same tests pass with no changes to the test inputs or expected outputs</li>
+<li><code>HashMap.ofList [...]</code> builds a context from a list of pairs — like Python's <code>dict([...])</code></li>
+<li>In a real project, <code>TVal</code>, <code>TNode</code>, and <code>expand</code> would live in a shared module (see <a href="../build/">build</a>)
+    and both the association-list and HashMap versions would import from it</li>
+</ul>
 <h2>Running the Program</h2>
 <div data-inc="code.lean" data-mark="main"><span aria-label="Source: template/code.lean" class="inc-path" role="img" tabindex="0" title="template/code.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Entry point: render a template and print the result</span>
 <span class="c1">-- Run with: lean --run template/code.lean</span>

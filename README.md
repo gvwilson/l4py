@@ -17,8 +17,9 @@
 1.  [A Template Expander](@/template/)
 1.  [A Database](@/db/)
 1.  [Building Projects](@/build/)
-1.  [Proofs](@/proof/)
 1.  [Binary Data](@/binary/)
+1.  [Proofs](@/proof/)
+1.  [Type Classes](@/advanced/)
 1.  [Conclusion](@/finale/)
 
 </div>

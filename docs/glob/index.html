@@ -29,8 +29,9 @@
 <li><a href="../template/">A Template Expander</a></li>
 <li><a href="../db/">A Database</a></li>
 <li><a href="../build/">Building Projects</a></li>
-<li><a href="../proof/">Proofs</a></li>
 <li><a href="../binary/">Binary Data</a></li>
+<li><a href="../proof/">Proofs</a></li>
+<li><a href="../advanced/">Type Classes</a></li>
 <li><a href="../finale/">Conclusion</a></li>
 </ul>
 </div>
@@ -126,6 +127,7 @@
 </li>
 <li>The <code>Wild</code> case uses <code>List.range</code> to generate split points and <code>.any</code> to try each<ul>
 <li>This is the backtracking: try matching 0 chars, then 1, then 2, etc.</li>
+<li><code>cs.length + 1</code> (not <code>cs.length</code>) ensures the range includes <code>cs.length</code> — the case where <code>*</code> consumes <em>all</em> remaining characters</li>
 <li>Like trying different amounts of input consumed by <code>*</code></li>
 </ul>
 </li>
@@ -190,7 +192,7 @@
 <ul>
 <li><code>parsePat</code> converts shell syntax (<code>?</code> and <code>*</code>) into <code>Elem</code> values</li>
 <li><code>filterMap</code> applies a function and discards <code>none</code> results<ul>
-<li>Like Python's <code>[f(x) for x in items if f(x) is not None]</code></li>
+<li>Like Python's <code>[y for x in items if (y := f(x)) is not None]</code> (walrus operator, Python 3.8+)</li>
 </ul>
 </li>
 <li>Every character produces <code>some Elem</code>, so nothing is filtered<ul>

@@ -16,6 +16,7 @@ skips = [
     "*.sh",
     "*~",
     ".lake/**",
+    "archive/archive-dir/**",
     "build/.lake/**",
     "proof/.lake/**",
     "bin/**",

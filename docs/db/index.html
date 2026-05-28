@@ -29,8 +29,9 @@
 <li><a href="../template/">A Template Expander</a></li>
 <li><a class="active" href="../db/">A Database</a></li>
 <li><a href="../build/">Building Projects</a></li>
-<li><a href="../proof/">Proofs</a></li>
 <li><a href="../binary/">Binary Data</a></li>
+<li><a href="../proof/">Proofs</a></li>
+<li><a href="../advanced/">Type Classes</a></li>
 <li><a href="../finale/">Conclusion</a></li>
 </ul>
 </div>
@@ -122,7 +123,7 @@
 <li>The function returns <code>some v</code> when the key matches, <code>none</code> otherwise</li>
 </ul>
 </li>
-<li><code>β := Option String</code> tells <code>findSome?</code> the inner type</li>
+<li><code>β := Option String</code> is an explicit type annotation: Lean cannot infer the inner type of <code>findSome?</code> here without a hint</li>
 <li><code>Option.join</code> flattens <code>Option (Option String)</code> to <code>Option String</code><ul>
 <li><code>some (some "val")</code> → <code>some "val"</code> (key found with value)</li>
 <li><code>some none</code> → <code>none</code> (tombstone found)</li>
@@ -144,12 +145,13 @@
 <li><code>dbCompact</code> removes redundant entries, keeping only the newest per key</li>
 <li>Algorithm: scan reversed log, keep first occurrence of each key<ul>
 <li><code>seen</code> tracks keys already encountered</li>
-<li><code>kept</code> accumulates deduplicated entries in newest-first order</li>
+<li><code>kept</code> accumulates deduplicated entries</li>
 </ul>
 </li>
-<li>The result is in original order (newest last) because of double-reversal<ul>
-<li>The fold processes reversed log (newest-first) and builds <code>kept</code> in reverse</li>
-<li>The final <code>kept</code> is already in original order</li>
+<li>Scanning newest-first and <em>prepending</em> each new entry to <code>kept</code> restores original key order<ul>
+<li>The first new key encountered (newest "b") is prepended first, then newest "a" is prepended on top of it</li>
+<li>Result: "a" before "b" — same order as the original log</li>
+<li>Same trick as reversing a list with <code>foldl</code> and prepend</li>
 </ul>
 </li>
 <li>Like Python's <code>dict(reversed(log))</code> but preserving insertion order of last write</li>

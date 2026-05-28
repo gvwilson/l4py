@@ -29,8 +29,9 @@
 <li><a href="../template/">A Template Expander</a></li>
 <li><a href="../db/">A Database</a></li>
 <li><a href="../build/">Building Projects</a></li>
-<li><a href="../proof/">Proofs</a></li>
 <li><a href="../binary/">Binary Data</a></li>
+<li><a href="../proof/">Proofs</a></li>
+<li><a href="../advanced/">Type Classes</a></li>
 <li><a href="../finale/">Conclusion</a></li>
 </ul>
 </div>
@@ -196,24 +197,70 @@
 <li><code>s!"{archiveDir}/{h}.bck"</code> constructs the blob path using string interpolation</li>
 <li>Then <code>IO.FS.writeBinFile</code> writes the bytes back to the original file path</li>
 </ul>
-<h2>Taking a Directory Snapshot</h2>
-<ul>
-<li><code>snapshotDir</code> would read an entire directory and snapshot every file in it</li>
-<li>The pattern is: list directory → filter to regular files → read each file → call <code>snapshot</code></li>
-</ul>
-<div data-inc="archive.lean" data-mark="snapshot-dir"><span aria-label="Source: archive/archive.lean" class="inc-path" role="img" tabindex="0" title="archive/archive.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- IO: snapshot all files in a directory (requires directory listing not in prelude)</span>
-<span class="c1">-- In practice you'd use IO.FS.readDir from Std, but the prelude doesn't include it.</span>
-<span class="c1">-- The pattern is: read directory → filter files → read bytes → call snapshot.</span>
+<h2>Listing a Directory</h2>
+<div data-inc="archive_dir.lean" data-mark="list-files"><span aria-label="Source: archive/archive_dir.lean" class="inc-path" role="img" tabindex="0" title="archive/archive_dir.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Collect all regular files in a directory as (path, bytes) pairs</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">listFiles</span><span class="w"> </span><span class="o">(</span><span class="n">dir</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">IO</span><span class="w"> </span><span class="o">(</span><span class="n">List</span><span class="w"> </span><span class="o">(</span><span class="n">String</span><span class="w"> </span><span class="bp">×</span><span class="w"> </span><span class="n">ByteArray</span><span class="o">))</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">entries</span><span class="w"> </span><span class="bp">←</span><span class="w"> </span><span class="o">(</span><span class="n">dir</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">System</span><span class="bp">.</span><span class="n">FilePath</span><span class="o">)</span><span class="bp">.</span><span class="n">readDir</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">mut</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">List</span><span class="w"> </span><span class="o">(</span><span class="n">String</span><span class="w"> </span><span class="bp">×</span><span class="w"> </span><span class="n">ByteArray</span><span class="o">)</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">[]</span>
+<span class="w">  </span><span class="n">for</span><span class="w"> </span><span class="n">entry</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">entries</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">let</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="bp">←</span><span class="w"> </span><span class="n">entry</span><span class="bp">.</span><span class="n">path</span><span class="bp">.</span><span class="n">metadata</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">info</span><span class="bp">.</span><span class="n">type</span><span class="w"> </span><span class="bp">==</span><span class="w"> </span><span class="n">IO</span><span class="bp">.</span><span class="n">FS</span><span class="bp">.</span><span class="n">FileType</span><span class="bp">.</span><span class="n">file</span><span class="w"> </span><span class="k">then</span>
+<span class="w">      </span><span class="k">let</span><span class="w"> </span><span class="n">bytes</span><span class="w"> </span><span class="bp">←</span><span class="w"> </span><span class="n">IO</span><span class="bp">.</span><span class="n">FS</span><span class="bp">.</span><span class="n">readBinFile</span><span class="w"> </span><span class="n">entry</span><span class="bp">.</span><span class="n">path</span>
+<span class="w">      </span><span class="n">files</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="bp">++</span><span class="w"> </span><span class="o">[(</span><span class="n">entry</span><span class="bp">.</span><span class="n">path</span><span class="bp">.</span><span class="n">toString</span><span class="o">,</span><span class="w"> </span><span class="n">bytes</span><span class="o">)]</span>
+<span class="w">  </span><span class="n">return</span><span class="w"> </span><span class="n">files</span>
 </code></pre></div>
 </div>
 <ul>
-<li>FIXME: show how to import the library and use Std here</li>
-<li>The prelude doesn't include directory listing, so this section is a sketch<ul>
-<li><code>IO.FS.readDir</code> exists in <code>Std</code> but requires <code>import Std</code></li>
-<li>We'll see imports in detail in a later lesson (DEBT)</li>
+<li><code>dir.readDir</code> lists all entries in a directory and returns an <code>Array IO.FS.DirEntry</code><ul>
+<li><code>dir</code> must be a <code>System.FilePath</code>; a <code>String</code> is coerced automatically</li>
+<li>Like Python's <code>os.scandir(dir)</code> — returns both files and subdirectories</li>
 </ul>
 </li>
-<li>The key idea: combine a directory reader with the archiver we already built</li>
+<li><code>entry.path.metadata</code> inspects the filesystem entry<ul>
+<li>Returns an <code>IO.FS.Metadata</code> record with a <code>.type</code> field</li>
+<li><code>IO.FS.FileType.file</code> means a regular file; <code>.dir</code> is a subdirectory</li>
+</ul>
+</li>
+<li><code>let mut files := []</code> accumulates results using a mutable variable in the <code>do</code> block (see <a href="../io/">io</a>)</li>
+<li>The result is a list of <code>(path, bytes)</code> pairs — exactly what <code>snapshot</code> already expects</li>
+</ul>
+<h2>Archiving a Directory</h2>
+<div data-inc="archive_dir.lean" data-mark="snapshot-dir"><span aria-label="Source: archive/archive_dir.lean" class="inc-path" role="img" tabindex="0" title="archive/archive_dir.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Archive every regular file in srcDir to archiveDir</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">snapshotDir</span><span class="w"> </span><span class="o">(</span><span class="n">srcDir</span><span class="w"> </span><span class="n">archiveDir</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">String</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">IO</span><span class="w"> </span><span class="n">Manifest</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">FS</span><span class="bp">.</span><span class="n">createDirAll</span><span class="w"> </span><span class="n">archiveDir</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="bp">←</span><span class="w"> </span><span class="n">listFiles</span><span class="w"> </span><span class="n">srcDir</span>
+<span class="w">  </span><span class="n">snapshot</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">archiveDir</span>
+</code></pre></div>
+</div>
+<ul>
+<li><code>snapshotDir</code> is four lines: create the archive directory, list files, call <code>snapshot</code></li>
+<li><code>snapshot</code> (from <code>archive.lean</code>) is unchanged — it accepts any <code>List (String × ByteArray)</code></li>
+<li>This is the payoff of pure-core design: the I/O boundary is thin and swappable<ul>
+<li>Swapping hand-written sample files for real disk files required only <code>listFiles</code></li>
+</ul>
+</li>
+</ul>
+<div data-inc="archive_dir.lean" data-mark="main-dir"><span aria-label="Source: archive/archive_dir.lean" class="inc-path" role="img" tabindex="0" title="archive/archive_dir.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Entry point: archive a directory and report results</span>
+<span class="c1">-- Run with: lean --run archive/archive_dir.lean</span>
+<span class="kn">def</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">IO</span><span class="w"> </span><span class="n">Unit</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">archiveDir</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s2">"archive-dir"</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="n">s!</span><span class="s2">"Scanning current directory..."</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">manifest</span><span class="w"> </span><span class="bp">←</span><span class="w"> </span><span class="n">snapshotDir</span><span class="w"> </span><span class="s2">"."</span><span class="w"> </span><span class="n">archiveDir</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="n">s!</span><span class="s2">"Archived {manifest.length} file(s) to {archiveDir}/"</span>
+<span class="w">  </span><span class="k">let</span><span class="w"> </span><span class="n">blobs</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">(</span><span class="n">buildManifest</span><span class="w"> </span><span class="o">(</span><span class="bp">←</span><span class="w"> </span><span class="n">listFiles</span><span class="w"> </span><span class="s2">"."</span><span class="o">))</span><span class="bp">.</span><span class="m">2</span><span class="bp">.</span><span class="n">length</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="n">s!</span><span class="s2">"Unique content blobs: {blobs}"</span>
+<span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="s2">"Done."</span>
+</code></pre></div>
+</div>
+<ul>
+<li>To compile and type-check:<ul>
+<li><code>lake env lean archive/archive_dir.lean</code></li>
+</ul>
+</li>
+<li>To run and create a real archive:<ul>
+<li><code>lean --run archive/archive_dir.lean</code></li>
+</ul>
+</li>
 </ul>
 <h2>Testing the Pure Core</h2>
 <div data-inc="archive.lean" data-mark="tests"><span aria-label="Source: archive/archive.lean" class="inc-path" role="img" tabindex="0" title="archive/archive.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Tests (pure core) ---------------------------------------------------</span>
