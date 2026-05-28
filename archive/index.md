@@ -87,18 +87,34 @@
 -   `s!"{archiveDir}/{h}.bck"` constructs the blob path using string interpolation
 -   Then `IO.FS.writeBinFile` writes the bytes back to the original file path
 
-## Taking a Directory Snapshot
+## Listing a Directory
 
--   `snapshotDir` would read an entire directory and snapshot every file in it
--   The pattern is: list directory → filter to regular files → read each file → call `snapshot`
+[%inc archive_dir.lean mark=list-files %]
 
-[%inc archive.lean mark=snapshot-dir %]
+-   `dir.readDir` lists all entries in a directory and returns an `Array IO.FS.DirEntry`
+    -   `dir` must be a `System.FilePath`; a `String` is coerced automatically
+    -   Like Python's `os.scandir(dir)` — returns both files and subdirectories
+-   `entry.path.metadata` inspects the filesystem entry
+    -   Returns an `IO.FS.Metadata` record with a `.type` field
+    -   `IO.FS.FileType.file` means a regular file; `.dir` is a subdirectory
+-   `let mut files := []` accumulates results using a mutable variable in the `do` block (see [io](@/io/))
+-   The result is a list of `(path, bytes)` pairs — exactly what `snapshot` already expects
 
--   FIXME: show how to import the library and use Std here
--   The prelude doesn't include directory listing, so this section is a sketch
-    -   `IO.FS.readDir` exists in `Std` but requires `import Std`
-    -   We'll see imports in detail in a later lesson (DEBT)
--   The key idea: combine a directory reader with the archiver we already built
+## Archiving a Directory
+
+[%inc archive_dir.lean mark=snapshot-dir %]
+
+-   `snapshotDir` is four lines: create the archive directory, list files, call `snapshot`
+-   `snapshot` (from `archive.lean`) is unchanged — it accepts any `List (String × ByteArray)`
+-   This is the payoff of pure-core design: the I/O boundary is thin and swappable
+    -   Swapping hand-written sample files for real disk files required only `listFiles`
+
+[%inc archive_dir.lean mark=main-dir %]
+
+-   To compile and type-check:
+    -   `lake env lean archive/archive_dir.lean`
+-   To run and create a real archive:
+    -   `lean --run archive/archive_dir.lean`
 
 ## Testing the Pure Core
 

@@ -53,7 +53,7 @@
 -   `List.reverse log` puts newest entries first
 -   `findSome?` returns the first `some` result from the scan function
     -   The function returns `some v` when the key matches, `none` otherwise
--   `β := Option String` tells `findSome?` the inner type
+-   `β := Option String` is an explicit type annotation: Lean cannot infer the inner type of `findSome?` here without a hint
 -   `Option.join` flattens `Option (Option String)` to `Option String`
     -   `some (some "val")` → `some "val"` (key found with value)
     -   `some none` → `none` (tombstone found)
@@ -67,10 +67,11 @@
 -   `dbCompact` removes redundant entries, keeping only the newest per key
 -   Algorithm: scan reversed log, keep first occurrence of each key
     -   `seen` tracks keys already encountered
-    -   `kept` accumulates deduplicated entries in newest-first order
--   The result is in original order (newest last) because of double-reversal
-    -   The fold processes reversed log (newest-first) and builds `kept` in reverse
-    -   The final `kept` is already in original order
+    -   `kept` accumulates deduplicated entries
+-   Scanning newest-first and *prepending* each new entry to `kept` restores original key order
+    -   The first new key encountered (newest "b") is prepended first, then newest "a" is prepended on top of it
+    -   Result: "a" before "b" — same order as the original log
+    -   Same trick as reversing a list with `foldl` and prepend
 -   Like Python's `dict(reversed(log))` but preserving insertion order of last write
 
 ## Checking Key Existence

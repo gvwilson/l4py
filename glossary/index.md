@@ -22,6 +22,10 @@
 
 ## E
 
+<span id="encapsulation">encapsulation</span>
+:   Hiding the internal implementation of a component behind a stable interface,
+    so that the implementation can change without affecting code that uses it.
+
 <span id="effectful">effectful</span>
 :   Describing a computation that performs side effects such as printing, reading input, or modifying state.
 
@@ -50,6 +54,14 @@
 :   A decision procedure for integer Presburger arithmetic used by Lean's `omega` tactic to solve linear arithmetic goals automatically.
 
 ## P
+
+<span id="partial">partial</span>
+:   A keyword that tells Lean to skip termination checking for a function.
+    Used when a function is known to terminate but Lean's automatic checker cannot prove it.
+
+<span id="point_free">point-free style</span>
+:   A way of defining functions by composing other functions without naming their arguments,
+    using `∘` or `|>`. The "point" refers to the argument value itself.
 
 <span id="prelude">prelude</span>
 :   A standard library of basic types and functions automatically available in every Lean file without an explicit import.
@@ -85,11 +97,19 @@
 
 ## T
 
+<span id="termination_checking">termination checking</span>
+:   Lean's automatic verification that every recursive function eventually stops.
+    Functions that cannot be proved terminating must be marked `partial`.
+
 <span id="tactic">tactic</span>
 :   A command that constructs a proof automatically, such as `rfl`, `omega`, or `simp`.
 
 <span id="tagged_union">tagged union</span>
 :   Another name for a sum type; a value that is one of several variants with a runtime tag indicating which variant is held.
+
+<span id="type_class">type class</span>
+:   An interface that defines operations a type must support, such as `BEq` for equality
+    or `Repr` for display. Instances are generated automatically with `deriving` or written by hand.
 
 <span id="type_alias">type alias</span>
 :   An alternative name for an existing type, created to improve readability without defining a new type.

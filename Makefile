@@ -25,7 +25,6 @@ bib:
 clean:
 	@rm -f $(OUTPUTS) dependencies.mk
 	@find . -type f -name '*~' -exec rm {} \;
-	@rm -f */*.out
 
 ## check: check code and project
 check:

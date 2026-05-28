@@ -139,6 +139,30 @@
     -   Both captures are combined in a single `IO.println`
 -   Like writing multiple `await` calls in one `async` function
 
+## For Loops in `do` Blocks
+
+[%inc for_loop.lean %]
+[%inc for_loop.out %]
+
+-   `for x in list do` iterates over a list inside a `do` block
+    -   Like Python's `for x in list:` but the body is an IO action
+-   Each iteration runs in sequence, top to bottom
+-   Works with `List`, `Array`, and any type that implements `ForIn`
+    -   Including the results of `IO.FS.readDir` (see [archive](@/archive/))
+-   The loop is syntactic sugar for recursion — there is no mutable loop variable by default
+
+## Accumulating Results with `for`
+
+[%inc for_accum.lean %]
+[%inc for_accum.out %]
+
+-   `let mut count := 0` declares a mutable variable in a `do` block
+    -   Only valid inside `do`; pure functions cannot use `mut`
+-   `count := count + 1` updates it — without `:=`, the variable is read-only
+-   Like Python's `count = 0; for w in words: if ...: count += 1`
+-   Lean guarantees `mut` variables don't escape the `do` block
+    -   They are not truly mutable memory — the compiler translates them into state-passing
+
 ## Summary
 
 -   `do` and `←` let you chain IO actions in sequence
@@ -149,6 +173,33 @@
     -   Use `return expr` to produce an IO result from a pure value
 -   Lean's `IO` is more than just files and sockets
 -   It also manages random number generation and any other [%g effectful "effectful" %] computation
+
+## Errors Without Exceptions
+
+[%inc except_pure.lean %]
+[%inc except_pure.out %]
+
+-   `Except String Int` is a sum type with two constructors:
+    -   `Except.ok n` — success, carrying a value of type `Int`
+    -   `Except.error e` — failure, carrying a message of type `String`
+-   Like Python's `(value, error)` tuple convention, but the compiler forces you to check both cases
+-   `match` on an `Except` is exhaustive: you cannot forget the error case
+-   Use `Except` for pure functions that can fail with a reason
+    -   Use `Option` when absence is normal and no explanation is needed
+
+## IO Can Fail
+
+[%inc except_io.lean %]
+[%inc except_io.out %]
+
+-   `try action catch _ => fallback` catches any IO exception
+    -   The `_` discards the exception value — inspect it with `catch e => ...` if needed
+-   IO operations like `IO.FS.readFile` throw on failure (file not found, permission denied, etc.)
+-   Wrapping in `try`/`catch` converts an exception into a safe `Option` or `Except` value
+-   Like Python's `try: ... except OSError: ...` but typed: the return type shows the fallback
+-   Pure `Except` (from the previous section) and IO `try`/`catch` are complementary:
+    -   Pure functions use `Except` to report errors without side effects
+    -   IO functions use `try`/`catch` to handle runtime failures
 
 <div class="exercise" markdown="1">
 

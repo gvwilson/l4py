@@ -9,7 +9,7 @@
 
 </div>
 
--   Template engines like [Jinja][jinja] or [Mustache][mustache] fill in placeholders with data
+-   Template engines like [Jinja][jinja] and [Mustache][mustache] fill in placeholders with data
 -   We'll build a minimal engine that supports variables, loops, and conditionals
 
 ## Template Values
@@ -18,7 +18,8 @@
 
 -   `TVal` is a sum type for values in the template context
 -   `TVal.Str s` holds a plain string
--   `TVal.List items` holds a list of contexts (one per loop iteration)
+-   `TVal.List items` holds a list of contexts, one per loop iteration
+    -   Each inner list is itself a `Context` (a list of `(name, value)` pairs) for that iteration
 
 ## Context
 
@@ -65,7 +66,7 @@
     -   `TText`: output the string directly
     -   `TVar`: look up the variable; output its string value (or `""` if not found)
     -   `TLoop`: for each item in the list variable, expand the body with that item's context pushed on top
-    -   `TIf`: check the variable; non-empty string or non-empty list → then branch, otherwise → else branch
+    -   `TIf`: check the variable; a non-empty `Str` or non-empty `List` is truthy → then branch; empty or missing → else branch
     -   `TSeq`: expand all child nodes and concatenate results with `++`
 -   `itemCtx ++ ctx` in `TLoop` pushes the loop variable's context in front
     -   The inner variable shadows any outer variable with the same name
@@ -97,6 +98,47 @@
 <h1>Welcome, Alice!</h1>
 <p>You have 3 items.</p>
 ```
+
+## A HashMap Context
+
+[%inc code_map.lean mark=hash-ctx %]
+
+-   `HashMap String TVal` maps variable names directly to values
+    -   Lookup is O(1) instead of O(n) scan down the association list
+    -   From the `Batteries` library: `import Batteries` and `open Std` are required
+-   `ctx[name]?` returns `Option TVal` — same return type as the list version
+-   The change is entirely inside `HashCtx` and `ctxGet`: nothing else in the engine needs to know
+
+[%inc code_map.lean mark=ctx-get-map %]
+
+-   `ctx[name]?` is HashMap's subscript operator — equivalent to `HashMap.getElem? ctx name`
+    -   Like Python's `ctx.get(name)` on a dict
+
+## What Stays the Same
+
+[%inc code_map.lean mark=tnode-map %]
+
+-   `TNode` is unchanged — it describes template *syntax*, not how context is stored
+-   `expand` is also unchanged in structure: it calls `ctxGet` and recurses on nodes
+
+[%inc code_map.lean mark=expand-map %]
+
+-   The only difference in `expand` is the loop case: merging an item's context into the HashMap
+    -   `itemCtx.foldl (fun m (k, v) => m.insert k v) ctx` inserts the loop variables on top
+    -   Instead of `itemCtx ++ ctx` (list prepend), we fold-insert into the parent map
+-   Every other branch is structurally identical to the association-list version
+-   This is [%g encapsulation "encapsulation" %] in practice: `TNode` and the core of `expand` are
+    stable; only the context *implementation* changed
+
+## Running the HashMap Version
+
+[%inc code_map.lean mark=tests-map %]
+[%inc code_map.lean mark=main-map %]
+
+-   The same tests pass with no changes to the test inputs or expected outputs
+-   `HashMap.ofList [...]` builds a context from a list of pairs — like Python's `dict([...])`
+-   In a real project, `TVal`, `TNode`, and `expand` would live in a shared module (see [build](@/build/))
+    and both the association-list and HashMap versions would import from it
 
 ## Running the Program
 

@@ -47,6 +47,7 @@
     -   `Elem.Wild` vs `cs`: try every split point from 0 to length
 -   The `Wild` case uses `List.range` to generate split points and `.any` to try each
     -   This is the backtracking: try matching 0 chars, then 1, then 2, etc.
+    -   `cs.length + 1` (not `cs.length`) ensures the range includes `cs.length` — the case where `*` consumes *all* remaining characters
     -   Like trying different amounts of input consumed by `*`
 -   `cs.drop i` skips the first `i` characters for the rest of the pattern
 
@@ -86,7 +87,7 @@
 
 -   `parsePat` converts shell syntax (`?` and `*`) into `Elem` values
 -   `filterMap` applies a function and discards `none` results
-    -   Like Python's `[f(x) for x in items if f(x) is not None]`
+    -   Like Python's `[y for x in items if (y := f(x)) is not None]` (walrus operator, Python 3.8+)
 -   Every character produces `some Elem`, so nothing is filtered
     -   We use `filterMap` rather than `map` to show the pattern for optional parsing (DEBT)
 -   `?` becomes `Elem.Any`, `*` becomes `Elem.Wild`, everything else becomes `Elem.Lit`

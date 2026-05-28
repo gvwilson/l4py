@@ -1,5 +1,6 @@
 *.out
 *~
 .lake
+archive/archive-dir
 build/MyProject
 dependencies.mk
