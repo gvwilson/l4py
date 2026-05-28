@@ -1,1 +1,1 @@
-echo "Someone" | lake env lean io/read_input.lean
+echo "Someone" | lake env lean read_input.lean

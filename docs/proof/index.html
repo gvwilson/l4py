@@ -64,7 +64,9 @@
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="n">False</span>
 </code></pre></div>
 </div>
-<div data-inc="prop_as_type.out"><span aria-label="Source: proof/prop_as_type.out" class="inc-path" role="img" tabindex="0" title="proof/prop_as_type.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>1 + 1 = 2 : Prop
+<div data-inc="prop_as_type.out"><span aria-label="Source: proof/prop_as_type.out" class="inc-path" role="img" tabindex="0" title="proof/prop_as_type.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: /Users/gvwilson/l4py/proof/lakefile.lean:5:2: unknown 'PackageConfig' field 'name'
+warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+1 + 1 = 2 : Prop
 5 &gt; 3 : Prop
 True : Prop
 False : Prop
@@ -85,7 +87,8 @@ False : Prop
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="bp">@</span><span class="n">onePlusOne</span>
 </code></pre></div>
 </div>
-<div data-inc="rfl_proof.out"><span aria-label="Source: proof/rfl_proof.out" class="inc-path" role="img" tabindex="0" title="proof/rfl_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>onePlusOne : 1 + 1 = 2
+<div data-inc="rfl_proof.out"><span aria-label="Source: proof/rfl_proof.out" class="inc-path" role="img" tabindex="0" title="proof/rfl_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+onePlusOne : 1 + 1 = 2
 </code></pre></div>
 </div>
 <ul>
@@ -108,11 +111,12 @@ False : Prop
 </li>
 </ul>
 <h2>When <code>rfl</code> Fails</h2>
-<div data-inc="rfl_fails.lean"><span aria-label="Source: proof/rfl_fails.lean" class="inc-path" role="img" tabindex="0" title="proof/rfl_fails.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- rfl only works when both sides reduce to the same value</span>
+<div data-inc="rfl_fails_err.lean"><span aria-label="Source: proof/rfl_fails_err.lean" class="inc-path" role="img" tabindex="0" title="proof/rfl_fails_err.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- rfl only works when both sides reduce to the same value</span>
 <span class="kn">theorem</span><span class="w"> </span><span class="n">wrong</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="bp">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rfl</span>
 </code></pre></div>
 </div>
-<div data-inc="rfl_fails.out"><span aria-label="Source: proof/rfl_fails.out" class="inc-path" role="img" tabindex="0" title="proof/rfl_fails.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>proof/rfl_fails.lean:2:32: error: Tactic `rfl` failed: The left-hand side
+<div data-inc="rfl_fails_err.out"><span aria-label="Source: proof/rfl_fails_err.out" class="inc-path" role="img" tabindex="0" title="proof/rfl_fails_err.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+rfl_fails_err.lean:2:32: error: Tactic `rfl` failed: The left-hand side
   1 + 1
 is not definitionally equal to the right-hand side
   3
@@ -135,7 +139,8 @@ is not definitionally equal to the right-hand side
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="bp">@</span><span class="n">addComm</span>
 </code></pre></div>
 </div>
-<div data-inc="omega_proof.out"><span aria-label="Source: proof/omega_proof.out" class="inc-path" role="img" tabindex="0" title="proof/omega_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>addComm : ∀ (a b : Nat), a + b = b + a
+<div data-inc="omega_proof.out"><span aria-label="Source: proof/omega_proof.out" class="inc-path" role="img" tabindex="0" title="proof/omega_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+addComm : ∀ (a b : Nat), a + b = b + a
 </code></pre></div>
 </div>
 <ul>
@@ -163,7 +168,7 @@ is not definitionally equal to the right-hand side
 <span class="kn">theorem</span><span class="w"> </span><span class="n">listLen</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">,</span><span class="w"> </span><span class="mi">2</span><span class="o">,</span><span class="w"> </span><span class="mi">3</span><span class="o">]</span><span class="bp">.</span><span class="n">length</span><span class="w"> </span><span class="bp">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">simp</span>
 </code></pre></div>
 </div>
-<div data-inc="simp_proof.out"><span aria-label="Source: proof/simp_proof.out" class="inc-path" role="img" tabindex="0" title="proof/simp_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>
+<div data-inc="simp_proof.out"><span aria-label="Source: proof/simp_proof.out" class="inc-path" role="img" tabindex="0" title="proof/simp_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
 </code></pre></div>
 </div>
 <ul>
@@ -181,7 +186,8 @@ is not definitionally equal to the right-hand side
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="bp">@</span><span class="n">mem3</span>
 </code></pre></div>
 </div>
-<div data-inc="decide_proof.out"><span aria-label="Source: proof/decide_proof.out" class="inc-path" role="img" tabindex="0" title="proof/decide_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>mem3 : 3 ∈ [1, 2, 3, 4]
+<div data-inc="decide_proof.out"><span aria-label="Source: proof/decide_proof.out" class="inc-path" role="img" tabindex="0" title="proof/decide_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+mem3 : 3 ∈ [1, 2, 3, 4]
 </code></pre></div>
 </div>
 <ul>
@@ -205,7 +211,7 @@ is not definitionally equal to the right-hand side
 <span class="w">  </span><span class="n">omega</span>
 </code></pre></div>
 </div>
-<div data-inc="have_steps.out"><span aria-label="Source: proof/have_steps.out" class="inc-path" role="img" tabindex="0" title="proof/have_steps.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>
+<div data-inc="have_steps.out"><span aria-label="Source: proof/have_steps.out" class="inc-path" role="img" tabindex="0" title="proof/have_steps.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
 </code></pre></div>
 </div>
 <ul>
@@ -232,7 +238,8 @@ is not definitionally equal to the right-hand side
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="bp">@</span><span class="n">positiveSum</span>
 </code></pre></div>
 </div>
-<div data-inc="hypotheses.out"><span aria-label="Source: proof/hypotheses.out" class="inc-path" role="img" tabindex="0" title="proof/hypotheses.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>positiveSum : ∀ (a b : Int), 0 &lt; a → 0 &lt; b → 0 &lt; a + b
+<div data-inc="hypotheses.out"><span aria-label="Source: proof/hypotheses.out" class="inc-path" role="img" tabindex="0" title="proof/hypotheses.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+positiveSum : ∀ (a b : Int), 0 &lt; a → 0 &lt; b → 0 &lt; a + b
 </code></pre></div>
 </div>
 <ul>
@@ -260,7 +267,7 @@ is not definitionally equal to the right-hand side
 <span class="w">    </span><span class="bp">_</span><span class="w"> </span><span class="bp">=</span><span class="w"> </span><span class="mi">10</span><span class="w">    </span><span class="o">:=</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">rfl</span>
 </code></pre></div>
 </div>
-<div data-inc="calc_proof.out"><span aria-label="Source: proof/calc_proof.out" class="inc-path" role="img" tabindex="0" title="proof/calc_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>
+<div data-inc="calc_proof.out"><span aria-label="Source: proof/calc_proof.out" class="inc-path" role="img" tabindex="0" title="proof/calc_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
 </code></pre></div>
 </div>
 <ul>
@@ -293,7 +300,8 @@ is not definitionally equal to the right-hand side
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="bp">@</span><span class="n">zeroAdd</span>
 </code></pre></div>
 </div>
-<div data-inc="induction_proof.out"><span aria-label="Source: proof/induction_proof.out" class="inc-path" role="img" tabindex="0" title="proof/induction_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>zeroAdd : ∀ (n : Nat), 0 + n = n
+<div data-inc="induction_proof.out"><span aria-label="Source: proof/induction_proof.out" class="inc-path" role="img" tabindex="0" title="proof/induction_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
+zeroAdd : ∀ (n : Nat), 0 + n = n
 </code></pre></div>
 </div>
 <ul>
@@ -325,7 +333,7 @@ is not definitionally equal to the right-hand side
 <span class="kn">example</span><span class="w"> </span><span class="o">(</span><span class="n">n</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Nat</span><span class="o">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="bp">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">omega</span>
 </code></pre></div>
 </div>
-<div data-inc="example_proof.out"><span aria-label="Source: proof/example_proof.out" class="inc-path" role="img" tabindex="0" title="proof/example_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>
+<div data-inc="example_proof.out"><span aria-label="Source: proof/example_proof.out" class="inc-path" role="img" tabindex="0" title="proof/example_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: manifest out of date: packages directory changed; use `lake update` to rebuild the manifest (warning: this will update ALL workspace dependencies)
 </code></pre></div>
 </div>
 <ul>
@@ -351,11 +359,18 @@ is not definitionally equal to the right-hand side
 <span class="bp">#</span><span class="n">check</span><span class="w"> </span><span class="bp">@</span><span class="n">mulComm</span>
 </code></pre></div>
 </div>
-<div data-inc="ring_proof.out"><span aria-label="Source: proof/ring_proof.out" class="inc-path" role="img" tabindex="0" title="proof/ring_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>proof/ring_proof.lean:1:0: error: unknown module prefix 'Mathlib'
-
-No directory 'Mathlib' or file 'Mathlib.olean' in the search path entries:
-/Users/gvwilson/.elan/toolchains/leanprover--lean4---v4.30.0/lib/lean
-/Users/gvwilson/.elan/toolchains/leanprover--lean4---v4.30.0/lib/lean
+<div data-inc="ring_proof.out"><span aria-label="Source: proof/ring_proof.out" class="inc-path" role="img" tabindex="0" title="proof/ring_proof.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>info: workspace packages directory changed; renaming '/Users/gvwilson/l4py/proof/.lake/packages' to '/Users/gvwilson/l4py/proof/../.lake/packages'
+info: toolchain not updated; already up-to-date
+info: mathlib: running post-update hooks
+Current branch: master
+Using cache (Azure) from origin: (some leanprover-community/mathlib4)
+No files to download
+Already decompressed 8463 file(s)
+Current branch: master
+Using cache (Azure) from origin: (some leanprover-community/mathlib4)
+No files to download
+Already decompressed 8463 file(s)
+mulComm : ∀ (a b : ℕ), a * b = b * a
 </code></pre></div>
 </div>
 <ul>

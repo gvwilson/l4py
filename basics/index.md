@@ -32,8 +32,8 @@
 
 ## Strict Typing
 
-[%inc strict_values.lean %]
-[%inc strict_values.out %]
+[%inc strict_values_err.lean %]
+[%inc strict_values_err.out %]
 
 -   Python won't let you do this either
 -   But Lean's type system is more powerful and its checking is stricter
@@ -99,13 +99,13 @@
 -   `if`/`else if`/`else` is an expression returning a value
 -   This doesn't work because the function isn't guaranteed to return a string
 
-[%inc conditional_incomplete.lean %]
-[%inc conditional_incomplete.out %]
+[%inc conditional_incomplete_err.lean %]
+[%inc conditional_incomplete_err.out %]
 
 -   This doesn't work because the types are inconsistent
 
-[%inc conditional_inconsistent.lean %]
-[%inc conditional_inconsistent.out %]
+[%inc conditional_inconsistent_err.lean %]
+[%inc conditional_inconsistent_err.out %]
 
 -   That's a hell of an error message…
 

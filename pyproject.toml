@@ -5,41 +5,7 @@ version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
     "mccole>=3.1.0",
-    "taskipy>=1.14.1",
 ]
-
-[tool.taskipy.tasks.regen]
-help = "Regenerate .out files from .lean files."
-cmd = "python bin/regenerate.py basics types pipes io archive build proof binary"
-
-[tool.taskipy.tasks.bib]
-help = "Check bibliography entries."
-cmd = "mccole bib"
-
-[tool.taskipy.tasks.clean]
-help = "Clean up generated and cache files."
-cmd = """
-    find . -type f -name '*~' -exec rm {} \\;
-    rm -f */*.out
-"""
-
-[tool.taskipy.tasks.check]
-help = "Check code and project."
-cmd = """
-    mccole check --src . --dst docs
-    typos *.md */*.md
-"""
-
-[tool.taskipy.tasks.serve]
-help = "Serve generated HTML on port 8000."
-cmd = "python -m http.server -d docs 8000"
-
-[tool.taskipy.tasks.site]
-help = "Build HTML."
-cmd = """
-    mccole build --src . --dst docs
-    touch docs/.nojekyll
-"""
 
 [tool.mccole]
 brand = "L4Py"
@@ -50,7 +16,10 @@ skips = [
     "*.sh",
     "*~",
     ".lake/**",
+    "build/.lake/**",
+    "proof/.lake/**",
     "bin/**",
     "docs/**",
+    "lean-toolchain",
     "uv.lock"
 ]

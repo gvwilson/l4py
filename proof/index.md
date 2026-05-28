@@ -42,8 +42,8 @@
 
 ## When `rfl` Fails
 
-[%inc rfl_fails.lean %]
-[%inc rfl_fails.out %]
+[%inc rfl_fails_err.lean %]
+[%inc rfl_fails_err.out %]
 
 -   `rfl` only works when both sides reduce to the same value by computation
 -   `1 + 1 = 3` is false, so `rfl` fails with a type mismatch error

@@ -1,0 +1,1 @@
+tmp=$(mktemp -d) && cp "$(dirname "$0")/lib_vs_exe.lean" "$tmp/lakefile.lean" && cd "$tmp" && mkdir lib && touch lib/MathUtils.lean && echo "def main : IO Unit := pure ()" > Main.lean && lake build 2>&1

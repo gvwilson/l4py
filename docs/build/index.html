@@ -65,7 +65,7 @@
 <span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="n">s!</span><span class="s2">"2 + 2 = {2 + 2}"</span>
 </code></pre></div>
 </div>
-<div data-inc="single_file.out"><span aria-label="Source: build/single_file.out" class="inc-path" role="img" tabindex="0" title="build/single_file.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>
+<div data-inc="single_file.out"><span aria-label="Source: build/single_file.out" class="inc-path" role="img" tabindex="0" title="build/single_file.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: /Users/gvwilson/l4py/build/lakefile.lean:5:2: unknown 'PackageConfig' field 'name'
 </code></pre></div>
 </div>
 <ul>
@@ -108,8 +108,7 @@
 <span class="w">  </span><span class="n">root</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="ss">`Main</span>
 </code></pre></div>
 </div>
-<div data-inc="lake_new.out"><span aria-label="Source: build/lake_new.out" class="inc-path" role="img" tabindex="0" title="build/lake_new.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>build/lake_new.lean:5:0: error: elaboration function for `Lake.DSL.packageCommand` has not been implemented
-build/lake_new.lean:8:0: error: elaboration function for `Lake.DSL.leanExeCommand` has not been implemented
+<div data-inc="lake_new.out"><span aria-label="Source: build/lake_new.out" class="inc-path" role="img" tabindex="0" title="build/lake_new.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>
 </code></pre></div>
 </div>
 <ul>
@@ -206,11 +205,9 @@ build/lake_new.lean:8:0: error: elaboration function for `Lake.DSL.leanExeComman
 <span class="w">  </span><span class="n">IO</span><span class="bp">.</span><span class="n">println</span><span class="w"> </span><span class="o">(</span><span class="n">Helpers</span><span class="bp">.</span><span class="n">shout</span><span class="w"> </span><span class="s2">"lean"</span><span class="o">)</span>
 </code></pre></div>
 </div>
-<div data-inc="import_module.out"><span aria-label="Source: build/import_module.out" class="inc-path" role="img" tabindex="0" title="build/import_module.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>build/import_module.lean:2:0: error: unknown module prefix 'MyProject'
-
-No directory 'MyProject' or file 'MyProject.olean' in the search path entries:
-/Users/gvwilson/.elan/toolchains/leanprover--lean4---v4.30.0/lib/lean
-/Users/gvwilson/.elan/toolchains/leanprover--lean4---v4.30.0/lib/lean
+<div data-inc="import_module.out"><span aria-label="Source: build/import_module.out" class="inc-path" role="img" tabindex="0" title="build/import_module.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>Build completed successfully (0 jobs).
+Hello, Lake!
+LEAN!!!
 </code></pre></div>
 </div>
 <ul>
@@ -243,9 +240,10 @@ No directory 'MyProject' or file 'MyProject.olean' in the search path entries:
 <span class="w">  </span><span class="n">root</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="ss">`Main</span>
 </code></pre></div>
 </div>
-<div data-inc="lib_vs_exe.out"><span aria-label="Source: build/lib_vs_exe.out" class="inc-path" role="img" tabindex="0" title="build/lib_vs_exe.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>build/lib_vs_exe.lean:4:0: error: elaboration function for `Lake.DSL.packageCommand` has not been implemented
-build/lib_vs_exe.lean:8:0: error: elaboration function for `Lake.DSL.leanLibCommand` has not been implemented
-build/lib_vs_exe.lean:12:0: error: elaboration function for `Lake.DSL.leanExeCommand` has not been implemented
+<div data-inc="lib_vs_exe.out"><span aria-label="Source: build/lib_vs_exe.out" class="inc-path" role="img" tabindex="0" title="build/lib_vs_exe.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: /private/var/folders/jn/dg894s5542dbrw7ry6sks0r80000gn/T/tmp.X4n9fkxOln/lakefile.lean:5:2: unknown 'PackageConfig' field 'name'
+info: myproject: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+Build completed successfully (0 jobs).
 </code></pre></div>
 </div>
 <ul>
@@ -268,11 +266,8 @@ build/lib_vs_exe.lean:12:0: error: elaboration function for `Lake.DSL.leanExeCom
 <span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">Helpers</span><span class="bp">.</span><span class="n">greet</span><span class="w"> </span><span class="s2">"world"</span>
 </code></pre></div>
 </div>
-<div data-inc="lake_env.out"><span aria-label="Source: build/lake_env.out" class="inc-path" role="img" tabindex="0" title="build/lake_env.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>build/lake_env.lean:2:0: error: unknown module prefix 'MyProject'
-
-No directory 'MyProject' or file 'MyProject.olean' in the search path entries:
-/Users/gvwilson/.elan/toolchains/leanprover--lean4---v4.30.0/lib/lean
-/Users/gvwilson/.elan/toolchains/leanprover--lean4---v4.30.0/lib/lean
+<div data-inc="lake_env.out"><span aria-label="Source: build/lake_env.out" class="inc-path" role="img" tabindex="0" title="build/lake_env.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>Build completed successfully (0 jobs).
+"Hello, world!"
 </code></pre></div>
 </div>
 <ul>
@@ -298,9 +293,14 @@ No directory 'MyProject' or file 'MyProject.olean' in the search path entries:
 <span class="w">  </span><span class="n">root</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="ss">`Main</span>
 </code></pre></div>
 </div>
-<div data-inc="add_dep.out"><span aria-label="Source: build/add_dep.out" class="inc-path" role="img" tabindex="0" title="build/add_dep.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>build/add_dep.lean:4:0: error: elaboration function for `Lake.DSL.packageCommand` has not been implemented
-build/add_dep.lean:8:0: error: elaboration function for `Lake.DSL.requireDecl` has not been implemented
-build/add_dep.lean:11:0: error: elaboration function for `Lake.DSL.leanExeCommand` has not been implemented
+<div data-inc="add_dep.out"><span aria-label="Source: build/add_dep.out" class="inc-path" role="img" tabindex="0" title="build/add_dep.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>warning: /private/var/folders/jn/dg894s5542dbrw7ry6sks0r80000gn/T/tmp.MwPA9IF9Bf/lakefile.lean:5:2: unknown 'PackageConfig' field 'name'
+info: myproject: no previous manifest, creating one from scratch
+info: Std: cloning https://github.com/leanprover/std4
+info: Std: checking out revision '32dc18cde3684679f3c003de608743b57498c56f'
+info: updating toolchain to 'leanprover/lean4:v4.30.0'
+info: restarting Lake via Elan
+info: myproject: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
 </code></pre></div>
 </div>
 <ul>
