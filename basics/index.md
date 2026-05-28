@@ -320,4 +320,30 @@
 
 </details>
 
+### Fix: Let Binding Type
+
+[%inc ex_bug_let_bind.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `let doubled := x * 2` produces an `Int`, but the function returns `String`
+-   The `s!"…"` interpolation can convert `Int` to `String` automatically
+-   The reason this looks like it should work is that `s!"The value is {doubled}"` does produce a `String`
+-   Check carefully: what does `describeValue 5` actually evaluate to?
+
+</details>
+
+### Write: Sum a List
+
+[%inc ex_sum_list.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use recursion or `List.foldl` to add up the elements
+-   With recursion: handle `[]` (base case returns `0`) and `x :: xs` (add `x` to recursive call)
+-   With `foldl`: `xs.foldl (init := 0) (· + ·)`
+-   The `#guard` statements will confirm your result
+
+</details>
+
 </div>

@@ -127,4 +127,112 @@ calling `pack`. For `int32`, the size is always 4. For `str`, it is 4 plus the
 byte length of the string's UTF-8 encoding. Add a `#guard` that checks the result
 against `(pack someValues).size` for a mixed list.
 
+### Fix: Unpack Reads Big-Endian
+
+[%inc ex_bug_unpack_big_endian.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `packInt32` writes the least-significant byte first (little-endian): `b0=n&0xFF, b1=(n>>>8)&0xFF, …`
+-   `unpackInt32` reads the first byte as the most-significant (`b0 <<< 24`), which is big-endian
+-   To match, unpack should read `b0` as least-significant: no shift, then `b1 <<< 8`, `b2 <<< 16`, `b3 <<< 24`
+
+</details>
+
+### Fix: Pack Writes Big-Endian
+
+[%inc ex_bug_pack_big_endian.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The byte array puts `n>>>24` first and `n&0xFF` last, which is big-endian (most-significant byte first)
+-   Little-endian means least-significant byte first: swap the array order
+
+</details>
+
+### Fix: Empty Format List Returns None
+
+[%inc ex_bug_unpack_empty.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Unpacking nothing from any byte array should succeed and return an empty list
+-   The base case `[] => none` should be `[] => some []`
+-   Like reading zero fields from a buffer: there's nothing to fail
+
+</details>
+
+### Fix: Unpack String Without Bounds Check
+
+[%inc ex_bug_unpack_bounds.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `unpackInt32` returns a length, but that length might point past the end of the buffer
+-   After reading `len`, check that `next + n ≤ data.size` before calling `data.extract`
+-   If the bounds check fails, return `none` to signal corrupted data
+
+</details>
+
+### Fix: Pack Value Truncates Length
+
+[%inc ex_bug_pack_value_trunc.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `bytes.size.toUInt16` converts the byte count to a 16-bit integer before widening back to 32 bits
+-   This truncates any length larger than 65535
+-   Remove the `.toUInt16` step and use `bytes.size.toUInt32` directly
+
+</details>
+
+### Write: Hex Dump
+
+[%inc ex_hex_dump.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Iterate over each byte in the `ByteArray` using a `foldl` or recursion
+-   Convert each byte to two hex characters using the provided `hexDigit` helper
+-   Concatenate results: start with `""`, append each byte's hex representation
+
+</details>
+
+### Write: Generate Format Descriptors
+
+[%inc ex_fmts_of_values.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Map each `Value` constructor to its corresponding `Fmt` constructor
+-   `Value.int32` maps to `Fmt.int32`, `Value.str` maps to `Fmt.str`
+-   Use `List.map` with a function that pattern-matches on the `Value`
+
+</details>
+
+### Write: Compute Packed Size
+
+[%inc ex_packed_size.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Each `int32` is always 4 bytes
+-   Each `str` is 4 bytes (length header) plus the UTF-8 byte length of the string
+-   Use `List.foldl` to accumulate the total, or map then sum
+-   For string length: `s.toUTF8.size`
+
+</details>
+
+### Write: Unpack One Value
+
+[%inc ex_unpack_one.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Create a single-element format list `[fmt]` and call `unpack`
+-   Match on the result: `some [v]` returns `some v`, `some _` or `none` returns `none`
+-   Since `unpack` is defined in `code.lean`, you'll need to write a self-contained version or assume it's available
+
+</details>
+
 </div>

@@ -201,4 +201,105 @@ with one entry per line. Use `String.intercalate "\n"` to join the lines.
 
 </details>
 
+### Fix: Hash Digits in Wrong Order
+
+[%inc ex_bug_hash_digits.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `List.range 16` generates `[0, 1, …, 15]`, and `i * 4` shifts by 0, 4, 8, … bits each iteration
+-   This extracts the nibbles from least-significant to most-significant, but prints them in that same order
+-   The most-significant nibble should come first in the output
+-   Reverse the shift: `60 - i * 4` to start from the top nibble
+
+</details>
+
+### Fix: Blobs Not Deduplicated
+
+[%inc ex_bug_no_dedup.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `entries.map` copies every blob, including duplicates
+-   The original `buildManifest` uses `foldl` with a check: `if acc.any (·.1 == h) then acc else acc ++ [(h, bytes)]`
+-   Add a similar deduplication step before collecting blobs
+
+</details>
+
+### Fix: Snapshot Missing Directory
+
+[%inc ex_bug_snapshot.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `IO.FS.writeBinFile` will fail if the parent directory doesn't exist
+-   Add `IO.FS.createDirAll archiveDir` before the `for` loop
+-   `createDirAll` won't fail if the directory already exists (like Python's `os.makedirs(exist_ok=True)`)
+
+</details>
+
+### Fix: Restore Uses Wrong Path
+
+[%inc ex_bug_restore_path.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The blob file is named `archiveDir/<hash>.bck`, not `archiveDir/<path>.bck`
+-   The code uses `path` (the original filename) as the hash — that's wrong
+-   Fix the destructuring: `for (path, h) in manifest do` and use `h` in the blob path
+
+</details>
+
+### Write: Find File in Manifest
+
+[%inc ex_find_file.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `List.find?` to search for the path in the manifest
+-   The predicate is `fun (p, _) => p == path`
+-   If found, extract the hash with `.map (·.2)`
+-   `List.find?` already returns `Option`, so the result type matches
+
+</details>
+
+### Write: Count Unique Blobs
+
+[%inc ex_unique_blobs.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Extract all hashes from the blobs list, then deduplicate
+-   Use `List.map` to get the hash list, then keep only the first occurrence of each
+-   Same pattern as `dbCompact` from the [database lesson](@/db/): track seen hashes in a `foldl`
+-   Return `List.length` of the deduplicated list
+
+</details>
+
+### Write: Find Files by Hash
+
+[%inc ex_find_by_hash.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Use `List.filter` to keep only entries where the hash matches
+-   The predicate is `fun (_, h) => h == target`
+-   Then use `List.map (·.1)` to extract just the file paths
+-   Like finding all files that share the same content (deduplicated files)
+
+</details>
+
+### Write: Diff Two Manifests
+
+[%inc ex_diff_manifest.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Find paths that are in `old` but not in `new`
+-   Use `List.filter` on the old manifest with a predicate that checks if the path exists in new
+-   `new.any (fun (p, _) => p == path)` checks if a path exists in the new manifest
+-   This is like comparing two snapshots to find renamed or deleted files
+
+</details>
+
 </div>
