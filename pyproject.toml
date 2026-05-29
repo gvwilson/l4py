@@ -15,12 +15,12 @@ skips = [
     "*.out",
     "*.sh",
     "*~",
-    ".lake/**",
+    "AGENTS.md",
+    "Makefile",
     "archive/archive-dir/**",
-    "build/.lake/**",
-    "proof/.lake/**",
-    "bin/**",
-    "docs/**",
+    "bin",
+    "docs",
     "lean-toolchain",
+    "typos.toml",
     "uv.lock"
 ]
