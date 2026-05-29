@@ -180,20 +180,6 @@ def runSim (p : Params) (numEvents : Nat) : SimState :=
   s.queueSize ≤ p.capacity
 -- mccole: /tests
 
--- mccole: parse
--- Parse a non-negative decimal string such as "1" or "1.5" into a Float
-def parseFloat (s : String) : Option Float :=
-  match s.splitOn "." with
-  | [whole]       => whole.toNat?.map Float.ofNat
-  | [whole, frac] =>
-    match (whole.toNat?, frac.toNat?) with
-    | (some w, some f) =>
-      let denom := Float.ofNat (10 ^ frac.length)
-      some (Float.ofNat w + Float.ofNat f / denom)
-    | _ => none
-  | _ => none
--- mccole: /parse
-
 -- mccole: json
 -- Parse all six parameters from a JSON object string using Lean.Data.Json
 def parseJson (json : String) : Option Params := do
@@ -235,8 +221,8 @@ def main (args : List String) : IO Unit := do
       numProducers := sP.toNat?.getD 1,
       numConsumers := sC.toNat?.getD 1,
       capacity     := sN.toNat?.getD 1,
-      lambdaP      := (parseFloat sLp).getD 1.0,
-      lambdaC      := (parseFloat sLc).getD 1.0,
+      lambdaP      := sLp.toFloat?.getD 1.0,
+      lambdaC      := sLc.toFloat?.getD 1.0,
       seed         := sSeed.toNat?.getD 0
     }
     printResults p (runSim p numEvents) numEvents

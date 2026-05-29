@@ -100,12 +100,8 @@
 
 ## Parsing Input
 
-[%inc code.lean mark=parse %]
-
 [%inc code.lean mark=json %]
 
--   `parseFloat` splits on `"."` and reassembles as `whole + frac / 10^length`
-    -   Only handles non-negative decimals, which is all a rate or capacity can be
 -   `parseJson` uses `Json.parse` from `Lean.Data.Json` to parse the file contents
     -   `getObjValAs? Nat "P"` extracts field `"P"` and converts it to `Nat`
     -   `getObjValAs? Float "lambda_p"` extracts `"lambda_p"` and converts it to `Float`
