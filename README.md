@@ -18,7 +18,6 @@
 1.  [A Database](@/db/)
 1.  [Building Projects](@/build/)
 1.  [Binary Data](@/binary/)
-1.  [Proofs](@/proof/)
 1.  [Type Classes](@/advanced/)
 1.  [Conclusion](@/finale/)
 
@@ -36,6 +35,7 @@
 1.  [Contributing](@/contributing/)
 1.  [Bibliography](@/bibliography/)
 1.  [Glossary](@/glossary/)
+1.  [Proofs](@/proof/)
 
 </div>
 </div>

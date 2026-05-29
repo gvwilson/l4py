@@ -1,6 +1,6 @@
 # Binary Data
 
-## Outline
+<div class="callout" markdown="1">
 
 -   Programs usually store integers as fixed-width binary values rather than decimal strings
 -   Binary packing converts heterogeneous values into a compact byte sequence
@@ -8,6 +8,10 @@
 -   A format descriptor tells the unpacker how to reconstruct each value from raw bytes
 -   Variable-length data like strings needs a fixed-width length header so the reader
     knows where each value ends
+
+</div>
+
+-   Networks and files speak bytes, not strings
 
 ## Packable Values
 

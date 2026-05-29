@@ -3,7 +3,7 @@
 <div class="callout" markdown="1">
 
 -   Understand what Lean is and how it differs from Python
--   Explore functional programming and theorem proving
+-   Explore programming in a pure functional language
 
 </div>
 
