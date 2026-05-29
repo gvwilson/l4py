@@ -158,6 +158,26 @@
     -   Like Python's `zip(list1, list2)`
 -   All of these compose naturally in pipelines
 
+## Arrays vs. Lists
+
+[%inc arrays_vs_lists.lean %]
+[%inc arrays_vs_lists.out %]
+
+-   Lean has two sequence types with different performance characteristics
+-   `List` (e.g. `[1, 2, 3]`) is a singly-linked list
+    -   Adding to the front with `::` is O(1)
+    -   Pattern matching on head/tail is idiomatic and efficient
+    -   `List.length` and indexed access `list[i]!` are O(n)
+-   `Array` (e.g. `#[1, 2, 3]`) stores elements contiguously in memory
+    -   Indexed access `arr[i]!` is O(1)
+    -   Appending is amortized O(1) (like Python's `list.append`)
+    -   Cannot be pattern-matched with `::`
+-   Python's `list` is closer to Lean's `Array` in performance
+    -   If you're porting Python that uses `xs[i]`, use `Array` in Lean
+    -   If you're writing idiomatic Lean with `map`/`filter`/`foldl`, `List` is the natural choice
+-   Most IO functions (like `IO.FS.readDir`) return `Array`; pipeline functions work on `List`
+    -   Convert with `arr.toList` or `lst.toArray` as needed
+
 <div class="exercise" markdown="1">
 
 ## Exercises

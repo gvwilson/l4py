@@ -29,6 +29,18 @@
 -   `List (String × Hash)` is a list of `(path, hash)` pairs
 -   `abbrev` makes the intent clearer than writing `List (String × Hash)` everywhere
 
+## `abbrev` vs. `def` for Type Aliases
+
+-   Lean has two ways to create a type alias: `abbrev` and `def`
+-   `abbrev` is *transparent*: the type checker sees through it and treats `Hash` exactly as `String`
+    -   Type class instances for `String` (like `ToString` or `BEq`) automatically apply to `Hash`
+    -   You can pass a `Hash` anywhere a `String` is expected without any conversion
+-   `def` is *opaque*: the type checker treats the alias as a distinct type
+    -   Instances do not transfer automatically; you must re-derive or re-declare them
+    -   Passing a `def`-aliased type where the original is expected is a type error
+-   Use `abbrev` when the alias is purely for readability and you want full interchangeability
+-   Use `def` when you want the type system to enforce that the aliased type is not accidentally mixed with the original
+
 ## Hashing Bytes
 
 [%inc archive.lean mark=hash-bytes %]
@@ -115,6 +127,7 @@
     -   `lake env lean archive/archive_dir.lean`
 -   To run and create a real archive:
     -   `lean --run archive/archive_dir.lean`
+-   The distinction between these two commands is important; see [build](@/build/) for a full explanation
 
 ## Testing the Pure Core
 

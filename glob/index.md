@@ -63,6 +63,18 @@
 -   Only use `partial` when you're sure the function terminates
     -   An infinite loop in `partial` code will hang the compiler
 
+## Termination Without `partial`
+
+[%inc termination.lean %]
+[%inc termination.out %]
+
+-   For application programmers, there are three options when Lean rejects your recursive function:
+    1.  **Structural recursion**: match on the argument directly so Lean can see it shrinks — no annotation needed
+    2.  **`termination_by`**: supply a decreasing measure (a `Nat` expression that gets smaller each call); Lean checks the proof automatically
+    3.  **`partial`**: opt out of termination checking when the measure is too complex to express
+-   Prefer structural recursion or `termination_by` when possible: Lean's guarantee that your function terminates is a real correctness property
+-   `partial` gives up that guarantee — the function is unchecked at the type level, even if you are confident it terminates in practice
+
 ## String Matching Wrapper
 
 [%inc code.lean mark=match-glob %]

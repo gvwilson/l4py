@@ -73,6 +73,9 @@
     -   Result: "a" before "b" — same order as the original log
     -   Same trick as reversing a list with `foldl` and prepend
 -   Like Python's `dict(reversed(log))` but preserving insertion order of last write
+-   Performance: `dbCompact` traverses the log twice — once to reverse it, once to fold over it
+    -   Both passes are O(n); the total cost is O(n) overall
+    -   For large logs this is fine; for hot paths you could compact incrementally instead
 
 ## Checking Key Existence
 

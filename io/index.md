@@ -41,8 +41,8 @@
 -   `IO.println` prints a string followed by a newline
     -   Newline plus indentation isn't required, but it helps
 -   `#eval main` runs the action during compilation so we can see the output
--   Lean doesn't have exceptions
-    -   Errors are handled with sum types like `Except`, which we'll cover later (DEBT)
+-   Lean's pure functions cannot raise exceptions; IO actions can fail at runtime and are caught with `try`/`catch`
+    -   Errors in pure code are handled with sum types like `Except`, which we'll cover later in this chapter
 
 ## Doing More Than One Thing
 
@@ -163,6 +163,19 @@
 -   Lean guarantees `mut` variables don't escape the `do` block
     -   They are not truly mutable memory — the compiler translates them into state-passing
 
+## What `let mut` Really Does
+
+[%inc let_mut_state.lean %]
+[%inc let_mut_state.out %]
+
+-   `let mut` is syntactic sugar: the compiler rewrites mutable variables as extra function arguments threaded through each step
+    -   The generated code is purely functional; no heap mutation occurs
+    -   This is why pure functions can remain efficient even without mutable state: the compiler handles the bookkeeping
+-   The pure `foldl` version and the `let mut` loop produce the same result
+    -   For straightforward accumulation, the pure form is often shorter
+    -   For complex logic with multiple conditions or early exit, `let mut` is usually easier to read
+-   Both approaches are O(n) in the list length
+
 ## Summary
 
 -   `do` and `←` let you chain IO actions in sequence
@@ -200,6 +213,20 @@
 -   Pure `Except` (from the previous section) and IO `try`/`catch` are complementary:
     -   Pure functions use `Except` to report errors without side effects
     -   IO functions use `try`/`catch` to handle runtime failures
+
+## Lean's Three Error-Handling Mechanisms
+
+Lean splits failure across three mechanisms where Python uses exceptions for all of them:
+
+| Mechanism | Where | When to use |
+|-----------|-------|-------------|
+| `Option` | Pure functions | Absence is normal; no explanation needed. E.g., looking up a key that may not exist. |
+| `Except e a` | Pure functions | Failure needs a reason. E.g., parsing a string that may be malformed. |
+| `try`/`catch` | IO actions | Runtime failure outside your control. E.g., file not found, network error. |
+
+-   `Option` and `Except` appear in function signatures, so the compiler forces callers to handle failure
+-   `try`/`catch` is only available in `IO`; you cannot silently ignore an IO exception
+-   When migrating from Python: replace `None` returns with `Option`, replace `ValueError`/`KeyError` in pure logic with `Except`, and replace `OSError`/`IOError` with `try`/`catch` around IO actions
 
 <div class="exercise" markdown="1">
 

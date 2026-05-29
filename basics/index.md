@@ -63,6 +63,10 @@
 -   Index from 0
 -   Use `List.length` to get number of elements
     -   Just like `String.length` earlier
+-   Lean's `List` is a singly-linked list
+    -   Adding to the front (`::`) and pattern-matching head/tail are O(1)
+    -   `List.length` and indexed access (`list[i]`) are O(n) — they traverse the whole list
+    -   If you need O(1) random access, use `Array` instead (see [pipes](@/pipes/))
 
 ## Defining Simple Functions
 
@@ -128,6 +132,10 @@
     -   Tail is a list
 -   As with conditional, must handle all alternatives
 -   Lean checks that you done this have during compilation
+-   List concatenation (`++`) is O(n) in the length of the left list
+    -   Prepending a single element with `::` is O(1)
+    -   Functions that build a result list by prepending and then call `List.reverse` at the end
+        are a common pattern for achieving O(n) total cost
 
 ## Map, Filter, and Fold
 
@@ -184,6 +192,18 @@
 
 -   `#check` checks the type of an expression without evaluating it
 -   `Nat` is a natural (non-negative) number
+
+## `Nat` vs. `Int`
+
+-   Python has one integer type; Lean has two
+-   `Nat` is the natural numbers: 0, 1, 2, …
+    -   Cannot be negative: there is no `-1 : Nat`
+    -   `List.length` returns `Nat`, because a list can never have a negative number of elements
+-   `Int` includes negative numbers: …, -2, -1, 0, 1, 2, …
+-   Subtraction on `Nat` is [%g saturating_subtraction "saturating" %]: `3 - 5 : Nat` gives `0`, not `-2`
+    -   The compiler does not warn you about this
+    -   If you need negative results, use `Int` instead of `Nat`
+-   A whole-number literal like `42` is `Nat` by default; write `(42 : Int)` to force the type
 
 ## Type Inference
 
