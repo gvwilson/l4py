@@ -114,3 +114,131 @@
 -   `Describable.describe Color.Green` uses the hand-written instance
 -   Whenever you see `deriving X`, there is a type class `X` behind it
     -   You can always write the instance yourself instead — `deriving` is just a shortcut
+
+<div class="exercise" markdown="1">
+
+## Exercises
+
+### Fix: Missing String Instance
+
+[%inc ex_bug_tc_missing_instance.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `showAll ["a", "b"]` fails because there is no `Describable String` instance
+-   Add an instance that returns the string itself: `describe s := s`
+-   Like Python's `__str__` for built-in types
+
+</details>
+
+### Fix: Wrong Method Return Type
+
+[%inc ex_bug_tc_wrong_method.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The class declares `describe : α → String` but the instance returns `Nat`
+-   The return type must match the class declaration
+-   Use `s!"{n}"` to convert the `Nat` to a `String`
+
+</details>
+
+### Fix: Missing Type Class Constraint
+
+[%inc ex_bug_tc_missing_constraint.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `report` uses `Weighable.weight` but the signature only lists `[Describable α]`
+-   The compiler can't find the `Weighable` instance because you didn't ask for it
+-   Add `[Weighable α]` as a second constraint in the square brackets
+
+</details>
+
+### Fix: Missing Inherited Method
+
+[%inc ex_bug_tc_extend_missing.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `Verbose` extends `Describable`, so the instance must provide `describe` AND `verboseDescribe`
+-   The compiler error says which method is missing
+-   Add `describe n := s!"{n}"` to the instance body
+
+</details>
+
+### Fix: `deriving` Needs Parent Instances
+
+[%inc ex_bug_tc_deriving_fail.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `MyBox` tries to derive `Repr`, but its field `toy : Toy` needs `Repr` too
+-   `deriving` chains: if a type contains another type, both must derive the class
+-   Add `deriving Repr` to the `Toy` definition as well
+
+</details>
+
+### Write: A `Summarizable` Class
+
+[%inc ex_tc_summarizable.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Define `instance : Summarizable String where …`
+-   If the string is 10 chars or shorter, return it as-is
+-   Otherwise return `s.extract 0 10 ++ "..."` — use `String.extract` to slice
+
+</details>
+
+### Write: A `Doubleable` Class
+
+[%inc ex_tc_doubleable.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Define `instance : Doubleable Nat where …`
+-   The `twice` method should multiply by `2`: `twice n := n * 2`
+-   Simple arithmetic: this is the "hello world" of type class instances
+
+</details>
+
+### Write: A Function with Two Constraints
+
+[%inc ex_tc_two_constraints.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Change the signature to `def describeWeight [Describable α] [Weighable α] (x : α) : String`
+-   Use `Describable.describe x` for the name and `Weighable.weight x` for the weight
+-   Format with `s!"{...} weighs {...}g"`
+
+</details>
+
+### Write: Extend a Class
+
+[%inc ex_tc_extend_class.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Write `instance : Comparable Nat where …`
+-   `size n := n` — the size of a Nat is itself
+-   `biggerThan a b := a > b` — use the built-in `>` operator
+-   Both methods must be provided; `Comparable` inherits `size` from `Measurable`
+
+</details>
+
+### Write: A Manual Display Instance
+
+[%inc ex_tc_manual_repr.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   Write `instance : Display TrafficLight where …`
+-   Use pattern matching on the three constructors
+-   `| .Red => "red"`, `| .Yellow => "yellow"`, `| .Green => "green"`
+-   This is what `deriving Repr` does automatically — you're doing it by hand
+
+</details>
+
+</div>

@@ -19,6 +19,8 @@
 1.  [Building Projects](@/build/)
 1.  [Binary Data](@/binary/)
 1.  [Type Classes](@/advanced/)
+1.  [Tools](@/tools/)
+1.  [Discrete Event Simulation](@/des/)
 1.  [Conclusion](@/finale/)
 
 </div>

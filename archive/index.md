@@ -331,4 +331,16 @@ with one entry per line. Use `String.intercalate "\n"` to join the lines.
 
 </details>
 
+### Fix: Manifest Contains Wrong Hash
+
+[%inc ex_bug_manifest_path.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   The manifest should pair each path with that file's own hash
+-   The bug reverses the hash list before pairing, so `a.txt` gets `b.txt`'s hash and vice versa
+-   Remove `.reverse` so hashes stay in the same order as the paths
+
+</details>
+
 </div>
