@@ -19,6 +19,7 @@ skips = [
     "Makefile",
     "archive/archive-dir/**",
     "bin",
+    "dependencies.mk",
     "docs",
     "lean-toolchain",
     "typos.toml",
