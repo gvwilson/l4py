@@ -1,6 +1,11 @@
 import Lean
 open Lean
 
+def parseFloat? (s : String) : Option Float :=
+  match Json.parse s with
+  | Except.ok (Json.num n) => some n.toFloat
+  | _ => none
+
 -- mccole: rng
 -- Linear congruential generator constants from Numerical Recipes
 def lcgA : Nat := 1664525
@@ -221,8 +226,8 @@ def main (args : List String) : IO Unit := do
       numProducers := sP.toNat?.getD 1,
       numConsumers := sC.toNat?.getD 1,
       capacity     := sN.toNat?.getD 1,
-      lambdaP      := sLp.toFloat?.getD 1.0,
-      lambdaC      := sLc.toFloat?.getD 1.0,
+      lambdaP      := (parseFloat? sLp).getD 1.0,
+      lambdaC      := (parseFloat? sLc).getD 1.0,
       seed         := sSeed.toNat?.getD 0
     }
     printResults p (runSim p numEvents) numEvents
