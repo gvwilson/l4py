@@ -59,7 +59,7 @@
 
 [%inc archive.lean mark=build-manifest %]
 
--   `buildManifest` is the [%g "pure" pure %] core of the archiver
+-   `buildManifest` is the pure core of the archiver
     -   No I/O: takes data in, returns data out
     -   Hence the name "pure"
 -   Step 1: hash every file's bytes and create `(path, hash, bytes)` triples

@@ -10,7 +10,7 @@
 <span id="Press2007">Press2007</span>
 :    William H. Press, Saul A. Teukolsky, William T. Vetterling, and Brian P. Flannery:
     *Numerical Recipes: The Art of Scientific Computing*
-	(3rd ed.).
-	Cambridge University Press,
-	2007,
-	9780521880688.
+    (3rd ed.).
+    Cambridge University Press,
+    2007,
+    [9780521880688](https://isbnsearch.org/isbn/9780521880688).

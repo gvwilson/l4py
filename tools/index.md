@@ -20,7 +20,7 @@
 -   `IO.getRandomBytes` reads from the operating system's entropy pool
     -   E.g., on Linux this is `/dev/urandom`
     -   The result is different on every call:
-	    unlike the [%g rng "random number generator" %] (RNG) in [the DES lesson](@/des/) there is no seed
+        unlike the [%g rng "random number generator" %] (RNG) in [the DES lesson](@/des/) there is no seed
     -   Which means it is *deliberately* not reproducible
 -   `randomBytes` folds the byte list into a single `Nat`, treating the bytes as a base-256 number
     -   4 bytes give 32 bits of range: 0 to 4,294,967,295

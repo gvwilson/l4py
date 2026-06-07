@@ -2,7 +2,7 @@
 
 <div class="callout" markdown="1">
 
--   Define a [%g type_class "type class" %] to specify an interface that multiple types can satisfy
+-   Define a type class to specify an interface that multiple types can satisfy
 -   Write `instance` declarations to implement a type class for a specific type
 -   Use `[ClassName α]` constraints to write functions that work for any type with an instance
 -   Combine multiple constraints and extend classes with `extends`

@@ -18,7 +18,7 @@
 
 [%inc code.lean mark=elements %]
 
--   `inductive` defines a new [%g sum_type "sum type" %] with three constructors
+-   `inductive` defines a new sum type with three constructors
     -   Like a Python `Enum` but each variant can carry data
 -   `Elem.Lit c` matches a literal character
 -   `Elem.Any` matches exactly one character of any kind
@@ -57,7 +57,7 @@
     -   Normally you use structural recursion (the argument gets smaller each call)
 -   `glob` cannot be proved terminating by Lean's automatic checker
     -   The `Wild` case calls `glob ps (cs.drop i)` where the arguments don't structurally decrease
--   `partial` tells Lean: "trust me, this function terminates, don't try to prove it"
+-   [%g partial "partial" %] tells Lean: "trust me, this function terminates, don't try to prove it"
     -   The function will still run correctly at runtime
     -   But Lean won't try to generate a termination proof
 -   Only use `partial` when you're sure the function terminates
@@ -72,7 +72,7 @@
     1.  **Structural recursion**: match on the argument directly so Lean can see it shrinks — no annotation needed
     2.  **`termination_by`**: supply a decreasing measure (a `Nat` expression that gets smaller each call); Lean checks the proof automatically
     3.  **`partial`**: opt out of termination checking when the measure is too complex to express
--   Prefer structural recursion or `termination_by` when possible: Lean's guarantee that your function terminates is a real correctness property
+-   Prefer structural recursion or `termination_by` when possible: Lean's [%g termination_checking "termination checking" %] is a real correctness property
 -   `partial` gives up that guarantee — the function is unchecked at the type level, even if you are confident it terminates in practice
 
 ## String Matching Wrapper

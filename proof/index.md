@@ -68,7 +68,6 @@
 ## The `simp` Tactic
 
 [%inc simp_proof.lean %]
-[%inc simp_proof.out %]
 
 -   `simp` is a simplification tactic: it rewrites the goal using known [%g lemma "lemmas" %]
 -   Knows basic list facts: empty list append, list length from literals
@@ -93,7 +92,6 @@
 ## Using `have`
 
 [%inc have_steps.lean %]
-[%inc have_steps.out %]
 
 -   `have h : P := by tactic` introduces an intermediate step named `h`
     -   Like a `let` binding but for propositions instead of values
@@ -123,7 +121,6 @@
 ## `calc` Chains
 
 [%inc calc_proof.lean %]
-[%inc calc_proof.out %]
 
 -   `calc` is equational reasoning: a chain of steps where each links to the last
     -   `_` on the left of each step refers to the right-hand side of the previous step
@@ -163,7 +160,6 @@
 ## Anonymous Proofs
 
 [%inc example_proof.lean %]
-[%inc example_proof.out %]
 
 -   `example` is an anonymous theorem: like `theorem` but with no name
     -   Useful for quick checks without cluttering the namespace

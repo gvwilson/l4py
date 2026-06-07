@@ -18,7 +18,13 @@
 
 -   Lean is a compiled language, so it doesn't have a [%g repl "REPL" %]
 -   `#eval` means "evaluate this while compiling"`
+    -   Yes, the Lean compiler runs (some of) *your* code while compiling it
 -   Run with `lean add_numbers.lean`
+    -   May get a complaint about needing a `lean-toolchain` file
+    -   Specifies tool versions etc.
+    -   Minimal one shown below
+
+[%inc lean-toolchain %]
 
 ## Defining Values
 
@@ -36,7 +42,8 @@
 [%inc strict_values_err.out %]
 
 -   Python won't let you do this either
--   But Lean's type system is more powerful and its checking is stricter
+-   But it doesn't complain until you run the program
+-   Lean's type system is more powerful and its checking is stricter
 
 ## Guards
 
@@ -64,8 +71,8 @@
 -   Use `List.length` to get number of elements
     -   Just like `String.length` earlier
 -   Lean's `List` is a singly-linked list
-    -   Adding to the front (`::`) and pattern-matching head/tail are O(1)
-    -   `List.length` and indexed access (`list[i]`) are O(n) — they traverse the whole list
+    -   Adding to the front (shown below) and pattern-matching head/tail are O(1)
+    -   `List.length` and indexed access (`list[i]`) are O(n) because they traverse the whole list
     -   If you need O(1) random access, use `Array` instead (see [pipes](@/pipes/))
 
 ## Defining Simple Functions
@@ -101,17 +108,18 @@
 [%inc conditional.out %]
 
 -   `if`/`else if`/`else` is an expression returning a value
--   This doesn't work because the function isn't guaranteed to return a string
+-   The example below doesn't work because the function isn't guaranteed to return a string
 
 [%inc conditional_incomplete_err.lean %]
 [%inc conditional_incomplete_err.out %]
 
--   This doesn't work because the types are inconsistent
+-   The example below doesn't work because the types are inconsistent
 
 [%inc conditional_inconsistent_err.lean %]
 [%inc conditional_inconsistent_err.out %]
 
--   That's a hell of an error message…
+-   That's a hell of an error message
+-   It will eventually (sort of) make sense, but Lean has a long way to go to match the quality of Python's error messages
 
 ## Another Way to Do It
 
@@ -120,7 +128,8 @@
 
 -   Use `match…with` for pattern matching
 -   Each alternative uses `|` and `=>`
--   Use `_` as a catch-all
+-   Checked in order: first match wins
+-   Use `_` as a catch-all to match "anything else"
 
 ## Recursion
 
@@ -129,9 +138,9 @@
 
 -   Use `::` to get the head and tail of a list
     -   Head is one element
-    -   Tail is a list
--   As with conditional, must handle all alternatives
--   Lean checks that you done this have during compilation
+    -   Tail is a (possibly empty) list
+-   As with conditional, code must handle all alternatives
+-   And Lean checks that you done this have during compilation
 -   List concatenation (`++`) is O(n) in the length of the left list
     -   Prepending a single element with `::` is O(1)
     -   Functions that build a result list by prepending and then call `List.reverse` at the end
@@ -144,8 +153,10 @@
 
 -   Some patterns are so common that they're supported directly
 -   `fun args => expr` is used for short anonymous functions like Python's `lambda`
--   `map` and `filter` do what their names suggest
--   `foldl` is "fold left" and *must* be given an initial value
+-   `map` applies a function to each element of a list, creating a new list of results
+-   `filter` applies a test to each element of a list, creating a new list of elements that pass the test
+-   `foldl` (short for"fold left") creates a running total (or whatever the function does)
+    -   It *must* be given an initial value
 
 ## Local Definitions
 
@@ -160,8 +171,9 @@
 [%inc simple_tuples.lean %]
 [%inc simple_tuples.out %]
 
--   `×` separates the types of tuple elements (type `\times` in the editor)
--   Use `.1` and `.2` to access elements (no, not `.0`)
+-   `×` separates the types of tuple elements (type `\times` in a Lean-aware editor)
+-   Use `.1` and `.2` to access elements
+    -   Not `.0` because Lean follows mathematical conventions, not C's
 -   Use `let (x, y) := p` to extract both elements at once
 
 ## Missing Values
@@ -220,7 +232,7 @@
 [%inc idiomatic.lean %]
 [%inc idiomatic.out %]
 
--   Use `·` (a centered dot) to match parameters
+-   Use `·` (a centered dot) to match parameters in [%g point_free "point-free" %] style
     -   Which is a horrible usability decision
 -   Type `\cdot` in the editor and `\gt` to get `≥`
 -   If there are multiple parameters, each `·` matches the next one
@@ -285,6 +297,19 @@
 
 </details>
 
+### Fix: Let Binding Type
+
+[%inc ex_bug_let_bind.lean %]
+
+<details markdown="1"><summary>hint</summary>
+
+-   `let doubled := x * 2` produces an `Int`, but the function returns `String`
+-   The `s!"…"` interpolation can convert `Int` to `String` automatically
+-   The reason this looks like it should work is that `s!"The value is {doubled}"` does produce a `String`
+-   Check carefully: what does `describeValue 5` actually evaluate to?
+
+</details>
+
 ### Write: Double a Number
 
 [%inc ex_double.lean %]
@@ -337,19 +362,6 @@
 
 -   Replace `p` with a new `Point` that has `x` incremented by `1.0`
 -   Use the `{ old with field := newVal }` syntax shown in the structures section
-
-</details>
-
-### Fix: Let Binding Type
-
-[%inc ex_bug_let_bind.lean %]
-
-<details markdown="1"><summary>hint</summary>
-
--   `let doubled := x * 2` produces an `Int`, but the function returns `String`
--   The `s!"…"` interpolation can convert `Int` to `String` automatically
--   The reason this looks like it should work is that `s!"The value is {doubled}"` does produce a `String`
--   Check carefully: what does `describeValue 5` actually evaluate to?
 
 </details>
 

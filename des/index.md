@@ -27,7 +27,7 @@
     -   The same seed always produces the same sequence — reproducible simulations
 -   `expVariate` converts a uniform sample U into an exponential variate `X = -ln(U) / λ`
     -   This is the [%g inverse_cdf "inverse-CDF method" %]:
-	    if U ~ Uniform(0,1) then X ~ Exp(λ)
+        if U ~ Uniform(0,1) then X ~ Exp(λ)
     -   Shifting the numerator by 1 keeps U strictly inside (0, 1) so logarithm is always defined
 -   High λ = high rate = short inter-arrival times (like a busy coffee shop)
 -   Like Python's `random.expovariate(λ)`

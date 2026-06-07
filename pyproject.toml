@@ -14,6 +14,7 @@ skips = [
     "*.lean",
     "*.out",
     "*.sh",
+    "*.txt",
     "*~",
     "AGENTS.md",
     "Makefile",

@@ -17,7 +17,6 @@
 ## Single-File Programs
 
 [%inc single_file.lean %]
-[%inc single_file.out %]
 
 -   Run a single Lean file from the terminal with `lean filename.lean`
     -   Like `python script.py`
@@ -39,7 +38,6 @@
 ## Creating a Project
 
 [%inc lake_new.lean %]
-[%inc lake_new.out %]
 
 -   `lake new MyProject` creates a fresh project directory
     -   Generates a `lakefile.lean`, a `Main.lean`, and a `.lake/` cache directory
@@ -60,7 +58,6 @@
 ## Building from the Command Line
 
 [%inc lake_build.lean %]
-[%inc lake_build.out %]
 
 -   `lake build` compiles all targets in the project
     -   Like `cargo build` or `uv run python -m build`
@@ -79,7 +76,6 @@
 ## Multiple Source Files
 
 [%inc multi_file.lean %]
-[%inc multi_file.out %]
 
 -   Split large projects into multiple `.lean` files
     -   Each file becomes a module that other files can import
@@ -143,7 +139,6 @@
 ## Namespaces Across Files
 
 [%inc namespace_files.lean %]
-[%inc namespace_files.out %]
 
 -   By convention, namespace names should match the module import path
     -   File `MathUtils/Basic.lean` → module `MyProject.MathUtils.Basic`
