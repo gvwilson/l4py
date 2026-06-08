@@ -210,8 +210,8 @@
 </code></pre></div>
 </div>
 <ul>
-<li>Point-free style omits the argument names entirely<ul>
-<li>The argument is implicit: "double after adding one"</li>
+<li>Point-free style omits the parameter names entirely<ul>
+<li>The parameter is implicit: "double after adding one"</li>
 </ul>
 </li>
 <li><code>doubleAfterAdd</code> names <code>x</code> explicitly; <code>doubleAfterAddPF</code> never mentions it<ul>
@@ -219,7 +219,7 @@
 </ul>
 </li>
 <li>Point-free is concise for simple pipelines<ul>
-<li>For complex logic, naming the arguments is usually clearer</li>
+<li>For complex logic, naming the parameters is usually clearer</li>
 </ul>
 </li>
 <li>Python equivalent: <code>compose(double, add_one)</code> instead of <code>lambda x: double(add_one(x))</code></li>
@@ -665,8 +665,8 @@
 <details>
 <summary>hint</summary>
 <ul>
-<li><code>List.map</code> expects a function that takes one argument</li>
-<li><code>(· - ·)</code> is a two-argument function (subtraction with two placeholders)</li>
+<li><code>List.map</code> expects a function that takes one parameter</li>
+<li><code>(· - ·)</code> is a two-parameter function (subtraction with two placeholders)</li>
 <li>Use <code>(· - 2)</code> to subtract 2 from each element, or write an explicit <code>fun x =&gt; x - 2</code></li>
 </ul>
 </details>
@@ -723,7 +723,7 @@
 <li><code>addExcitement</code> does two things: uppercases, then appends <code>"!!!"</code></li>
 <li>Define an <code>exclaim</code> helper: <code>def exclaim (s : String) : String := s ++ "!!!"</code></li>
 <li>Then <code>addExcitementPF</code> is <code>exclaim ∘ String.toUpper</code></li>
-<li>The argument <code>s</code> disappears entirely: that's point-free</li>
+<li>The parameter <code>s</code> disappears entirely: that's point-free</li>
 </ul>
 </details>
 <h3>Write: Zip and Format</h3>

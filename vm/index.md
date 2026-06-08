@@ -123,7 +123,7 @@ Our virtual machine (VM) simulates a small computer with three parts:
 -   `parseVal` recognises `@label` references by the leading `@`
     -   Otherwise it parses a decimal integer
 -   `combine` shifts each value eight bits left and ORs in the next
-    -   The first argument in the list ends up in the highest byte
+    -   The first list item ends up in the highest byte
 
 ### Finding Labels
 

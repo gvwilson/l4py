@@ -1,6 +1,7 @@
 *.out
 *.txt
 *~
+.DS_Store
 .lake
 archive/archive-dir
 build/MyProject

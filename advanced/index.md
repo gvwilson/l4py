@@ -49,7 +49,7 @@
 
 -   `[Describable α]` is a [%g type_class "type class constraint" %]
     -   Read as: "for any type `α` that has a `Describable` instance"
-    -   Square brackets `[...]` distinguish class constraints from ordinary arguments `(...)`
+    -   Square brackets `[...]` distinguish class constraints from ordinary parameters `(...)`
 -   `showAll` works for `List Bool`, `List Int`, or any list whose element type has an instance
 -   Like a Python `Generic` function with a `Protocol` bound, but resolved at compile time
 

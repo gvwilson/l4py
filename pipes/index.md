@@ -64,12 +64,12 @@
 [%inc point_free.lean %]
 [%inc point_free.out %]
 
--   Point-free style omits the argument names entirely
-    -   The argument is implicit: "double after adding one"
+-   Point-free style omits the parameter names entirely
+    -   The parameter is implicit: "double after adding one"
 -   `doubleAfterAdd` names `x` explicitly; `doubleAfterAddPF` never mentions it
     -   Both produce the same result
 -   Point-free is concise for simple pipelines
-    -   For complex logic, naming the arguments is usually clearer
+    -   For complex logic, naming the parameters is usually clearer
 -   Python equivalent: `compose(double, add_one)` instead of `lambda x: double(add_one(x))`
 
 ## Filter-Map-Fold Pipelines
@@ -274,8 +274,8 @@
 
 <details markdown="1"><summary>hint</summary>
 
--   `List.map` expects a function that takes one argument
--   `(· - ·)` is a two-argument function (subtraction with two placeholders)
+-   `List.map` expects a function that takes one parameter
+-   `(· - ·)` is a two-parameter function (subtraction with two placeholders)
 -   Use `(· - 2)` to subtract 2 from each element, or write an explicit `fun x => x - 2`
 
 </details>
@@ -315,7 +315,7 @@
 -   `addExcitement` does two things: uppercases, then appends `"!!!"`
 -   Define an `exclaim` helper: `def exclaim (s : String) : String := s ++ "!!!"`
 -   Then `addExcitementPF` is `exclaim ∘ String.toUpper`
--   The argument `s` disappears entirely: that's point-free
+-   The parameter `s` disappears entirely: that's point-free
 
 </details>
 

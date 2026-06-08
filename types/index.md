@@ -12,7 +12,7 @@
 -   A structure is a [%g product_type "product type" %]
     -   Possible values are the cross-product of the values of the first field
         with the values of the second field, etc.
--   Explore other kinds of types
+-   This lesson explores other kinds of types
 
 ## Sum Types
 
@@ -25,8 +25,9 @@
 -   `StringOrInt` is a type whose values wrap either a `String` or an `Int`
     -   `StringOrInt.str` constructs a string-flavored value
     -   `StringOrInt.num` constructs a number-flavored value
+    -   The `→` specifies the result type for each constructor
 -   `deriving Repr` is like Python's `__repr__`
-    -   We'll explain why it's called `deriving` later (DEBT)
+    -   We'll explain why it's called `deriving` later in this lesson
 -   Since every element of the list has type `StringOrInt`, the list is homogeneous
 -   Use `match` to extract the wrapped value
     -   The compiler checks that you handle both cases
@@ -40,6 +41,9 @@
 -   `inductive` can define recursive types, not just flat sums
     -   `Tree` is either a `leaf` containing a `String`…
     -   …or a `node` containing two `Tree`s
+    -   Reminder: `Tree → Tree → Tree` means "a function that takes a `Tree`
+        and returns a function that takes a `Tree` and returns a `Tree`"
+    -   We promise you'll get used to it…
 -   Like defining a Python class where each instance is either a leaf or a branch
     -   But the compiler enforces that you can't mix the two accidentally
 -   This is why the keyword is `inductive`
@@ -72,9 +76,10 @@
 -   An [%g enumeration "enumeration" %] is a sum type where no constructor carries data
     -   Like Python's `enum.Enum`
 -   `inductive Season` defines four possible values with no extra payload
+    -   Note: `|` is a prefix before each option, not a separator between them
 -   `deriving BEq` generates the `==` operator
     -   Without it, you can't compare `Season` values
-    -   We'll explain the name `BEq` later (DEBT)
+    -   `BEq` is short for "Boolean equality"
 
 ## Sum Types with Data
 
@@ -84,6 +89,9 @@
 -   Constructors in a sum type can carry one or more data fields
     -   `Shape.circle` takes a `Float` for the radius
     -   `Shape.rect` takes two `Float`s for width and height
+    -   Yes, the parentheses seem oddly placed,
+        but remember that every function takes one parameter,
+        and we need to specify their types
 -   Like a [%g tagged_union "tagged union" %] where each tag stores different-shaped data
     -   Python equivalent: a `@dataclass` discriminator field plus a union of subclasses
 
@@ -129,7 +137,7 @@
 [%inc list_revealed.out %]
 
 -   `List` is also an `inductive` type with two constructors
-    -   `nil` for the empty list (written `[]`)
+    -   `[]` for the empty list (pronounced "nil")
     -   `cons` for adding an element to the front (written `head :: tail`)
     -   The name "cons" is short for "construct", and goes back to the 1950s
 -   `::` is just [%g syntactic_sugar "syntactic sugar" %] for `List.cons`
@@ -156,8 +164,7 @@
 -   A sum type can have multiple type parameters
     -   `Result α β` is generic over both the success type and the error type
 -   Like Rust's `Result` or Haskell's `Either`
--   Cleaner than Python's convention of returning `(value, error)` tuples
-    -   The compiler forces the caller to handle both `ok` and `err`
+-   The compiler forces the caller to handle both `ok` and `err`
 
 ## `match` with Conditions
 
@@ -167,9 +174,23 @@
 -   Sometimes constructors alone aren't enough: you need finer discrimination
 -   `match` arms are just expressions, so you can use `if`/`else if`/`else` inside them
     -   The `n'` pattern matches any `Int`, then the conditional further refines the result
-    -   Pronounced "en prime"
+    -   Pronounced "en prime" (blame math)
 -   The compiler still checks that the `match` is exhaustive
     -   A single `n'` branch covers all `Int` values, so no catch-all is needed here
+
+## Combining Branches and Conditions
+
+[%inc match_guard_shape.lean %]
+[%inc match_guard_shape.out %]
+
+-   Realistic code often needs both: pick a branch by constructor, then refine with `if`
+-   `Shape.circle r => …` and `Shape.rect w h => …` are separate `|` branches, one per constructor
+    -   Each branch destructures its constructor's fields (`r`, or `w` and `h`)
+-   Inside each branch, `if`/`else if`/`else` narrows the result further
+    -   The `circle` branch checks the radius
+    -   The `rect` branch compares width and height to distinguish squares from rectangles
+-   The compiler still requires every constructor to have a branch
+    -   But it doesn't (and can't) check that your conditions inside a branch are exhaustive — that's on you
 
 ## Nested Patterns
 
@@ -287,7 +308,7 @@
 
 <details markdown="1"><summary>hint</summary>
 
--   Use `match` on the `Day` argument to check which day it is
+-   Use `match` on the `Day` parameter to check which day it is
 -   Return `true` for `Day.saturday` and `Day.sunday`, `false` for everything else
 -   Use `_` as a catch-all for the five weekdays to keep the code short
 
@@ -349,7 +370,7 @@
 
 -   Use `match opt with` to handle `Option.some` and `Option.none`
 -   `Option.some val` means return `val` (ignore the default)
--   `Option.none` means return the `default` argument
+-   `Option.none` means return the `default` parameter
 
 </details>
 

@@ -26,8 +26,8 @@
     uses when filling in placeholders.
 
 <span id="currying">currying</span>
-:   Transforming a function that takes multiple arguments into a
-    sequence of functions each taking a single argument.
+:   Transforming a function that takes multiple parameters into a
+    sequence of functions each taking a single parameter.
 
 ## D
 
@@ -126,7 +126,7 @@
 
 <span id="point_free">point-free style</span>
 :   A way of defining functions by composing other functions without
-    naming their arguments, using `∘` or `|>`. The "point" refers to
+    naming their parameters, using `∘` or `|>`. The "point" refers to
     the argument value itself.
 
 <span id="prelude">prelude</span>

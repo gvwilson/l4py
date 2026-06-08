@@ -216,9 +216,9 @@ Hint: Type class instance resolution failures can be inspected with the `set_opt
 </code></pre></div>
 </div>
 <ul>
-<li>Every function actually takes only one argument</li>
-<li><code>func a b</code> defines a function that takes one argument…</li>
-<li>…and returns a function that takes one argument</li>
+<li>Every function actually takes only one parameter</li>
+<li><code>func a b</code> defines a function that takes one parameter…</li>
+<li>…and returns a function that takes one parameter</li>
 <li>This is called <a class="gl-ref" href="../glossary/#currying">currying</a><ul>
 <li>Named after the mathematician Haskell Curry</li>
 <li>The inspiration for Python's <code>functools.partial</code></li>
@@ -531,12 +531,12 @@ origin : Point
 </code></pre></div>
 </div>
 <ul>
-<li>Use <code>·</code> (a centered dot) to match parameters in <a class="gl-ref" href="../glossary/#point_free">point-free</a> style<ul>
+<li>Use <code>·</code> (a centered dot) to match arguments in <a class="gl-ref" href="../glossary/#point_free">point-free</a> style<ul>
 <li>Which is a horrible usability decision</li>
 </ul>
 </li>
-<li>Type <code>\cdot</code> in the editor and <code>\gt</code> to get <code>≥</code></li>
-<li>If there are multiple parameters, each <code>·</code> matches the next one<ul>
+<li>Type <code>\cdot</code> in the editor to get the centered dot and <code>\gt</code> to get <code>≥</code></li>
+<li>If there are multiple arguments, each <code>·</code> matches the next one<ul>
 <li>Which is an even worse usability decision, but we're stuck with it</li>
 </ul>
 </li>

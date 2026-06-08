@@ -95,9 +95,9 @@
 [%inc func_partial.lean %]
 [%inc func_partial.out %]
 
--   Every function actually takes only one argument
--   `func a b` defines a function that takes one argument…
--   …and returns a function that takes one argument
+-   Every function actually takes only one parameter
+-   `func a b` defines a function that takes one parameter…
+-   …and returns a function that takes one parameter
 -   This is called [%g currying "currying" %]
     -   Named after the mathematician Haskell Curry
     -   The inspiration for Python's `functools.partial`
@@ -232,10 +232,10 @@
 [%inc idiomatic.lean %]
 [%inc idiomatic.out %]
 
--   Use `·` (a centered dot) to match parameters in [%g point_free "point-free" %] style
+-   Use `·` (a centered dot) to match arguments in [%g point_free "point-free" %] style
     -   Which is a horrible usability decision
--   Type `\cdot` in the editor and `\gt` to get `≥`
--   If there are multiple parameters, each `·` matches the next one
+-   Type `\cdot` in the editor to get the centered dot and `\gt` to get `≥`
+-   If there are multiple arguments, each `·` matches the next one
     -   Which is an even worse usability decision, but we're stuck with it
 
 <div class="exercise" markdown="1">
