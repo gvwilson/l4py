@@ -1,6 +1,3 @@
--- namespaces prevent name collisions
--- like Python's modules: math.sin vs math.cos
-
 namespace Greeting
 
 def hello (name : String) : String := s!"Hello, {name}"

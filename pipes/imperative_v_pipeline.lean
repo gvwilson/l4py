@@ -1,6 +1,3 @@
--- imperative style: accumulate in mutable variables
--- (Python equivalent shown in comment)
-
 -- Lean version with explicit recursion:
 def sumOfSquaresOfEvens (xs : List Int) : Int :=
   match xs with

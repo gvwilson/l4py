@@ -1,4 +1,3 @@
--- List has many useful functions in the prelude
 def nums : List Int := [10, 20, 30, 40, 50]
 
 -- take first n elements

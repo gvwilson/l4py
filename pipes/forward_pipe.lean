@@ -7,7 +7,7 @@ def addOne (x : Int) : Int := x + 1
 -- with |> : left-to-right, step by step
 #eval 3 |> addOne |> double
 
--- works with any data type
+-- pipes work with any data type
 def greet (name : String) : String := s!"Hello, {name}"
 def shout (s : String) : String := s.toUpper
 

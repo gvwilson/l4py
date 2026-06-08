@@ -1,4 +1,3 @@
--- pipelines work with strings too
 def words : List String := ["hello", "world", "from", "lean"]
 
 #eval words

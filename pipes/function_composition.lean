@@ -10,7 +10,14 @@ def addThenDouble : Int → Int := double ∘ addOne
 -- compose more than two with parentheses
 def shout (s : String) : String := s.toUpper
 def greet (name : String) : String := s!"Hello, {name}"
+def addBang (s : String) : String := s ++ "!!"
 
-def excitedGreeting : String → String := shout ∘ greet
+-- parens bound the lambda body so ∘ connects two functions, not terms
+-- without them: fun s => s ++ "!!" ∘ shout parses as fun s => s ++ ("!!" ∘ shout)
+-- which is a type error: "!!" is a String, not a function
+def shoutThenBang : String → String := (fun s => s ++ "!!") ∘ shout
+#eval shoutThenBang "hello"
 
-#eval excitedGreeting "world"
+-- parens surround the whole composition before applying to an argument
+-- without them: "world" binds to greet first, giving a String where ∘ expects a function
+#eval (addBang ∘ shout ∘ greet) "world"

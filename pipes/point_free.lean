@@ -1,10 +1,10 @@
 def double (x : Int) : Int := x * 2
 def addOne (x : Int) : Int := x + 1
 
--- point-ful: the argument is named explicitly
+-- pointful: the argument is named explicitly
 def doubleAfterAdd (x : Int) : Int := double (addOne x)
 
--- point-free: the argument is never mentioned
+-- point-free: the argument isn't mentioned
 def doubleAfterAddPF : Int → Int := double ∘ addOne
 
 #eval doubleAfterAdd 3

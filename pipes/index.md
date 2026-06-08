@@ -4,7 +4,7 @@
 
 -   Chain function calls left-to-right with the forward pipeline operator `|>`
 -   Compose functions into new functions with `∘`
--   Build data transformation pipelines using filter, map, and fold
+-   Build data transformation pipelines using `filter`, `map`, and `foldl`
 -   Import libraries and organize code with namespaces
 
 </div>
@@ -33,7 +33,7 @@
 -   Anonymous functions work naturally in pipelines
 -   The `·` placeholder (from [basics](@/basics/)) makes them compact
 -   `List.map` and `List.filter` use the fully-qualified `List.` prefix
-    -   We'll explain `List.` vs plain `map` shortly (DEBT)
+    -   The [Namespaces](#namespaces) section explains when to use the full name vs. the short name
 
 ## Function Composition
 
@@ -55,7 +55,7 @@
 -   `|>` feeds data through functions: `3 |> addOne |> double`
     -   Use when you have a value
 -   `∘` builds a new function from two existing ones: `double ∘ addOne`
-    -   Use when you want to name the combined operation and reuse it
+    -   Use when you want to name and reuse the combined operation
 -   `x |> f |> g` is equivalent to `(g ∘ f) x`
     -   But `|>` is usually clearer when you have the data in hand
 
@@ -64,13 +64,13 @@
 [%inc point_free.lean %]
 [%inc point_free.out %]
 
--   Point-free style omits the parameter names entirely
-    -   The parameter is implicit: "double after adding one"
+-   [%g point_free "Point-free" %] style omits the parameter names entirely
 -   `doubleAfterAdd` names `x` explicitly; `doubleAfterAddPF` never mentions it
+    -   The parameter in the latter is implicit: "double after adding one"
     -   Both produce the same result
+    -   Saw this in [the basics lesson](@/basics/) but didn't name it
 -   Point-free is concise for simple pipelines
-    -   For complex logic, naming the parameters is usually clearer
--   Python equivalent: `compose(double, add_one)` instead of `lambda x: double(add_one(x))`
+    -   For complex logic, naming the parameters is almost always clearer
 
 ## Filter-Map-Fold Pipelines
 
@@ -91,9 +91,7 @@
 
 -   The recursive version spells out *how*: loop, accumulate, test, branch
 -   The pipeline version describes *what*: filter evens, square them, sum
--   Both produce the same result; pipelines are usually easier to read
--   In Python, you'd write a `for` loop with `if` and an accumulator variable
-    -   The pipeline is the same idea as `sum(x*x for x in xs if x % 2 == 0)`
+-   They produce the same result, but pipelines are usually easier to read
 
 ## Pipelines with Strings
 
@@ -112,16 +110,16 @@
 [%inc import_library.lean %]
 [%inc import_library.out %]
 
--   `import ModuleName` brings a library module into scope
-    -   Like Python's `import module`
 -   The Lean [%g prelude "prelude" %] is always available without imports
     -   It includes `List`, `String`, `Option`, `Nat`, `Int`, and basic operations
--   Everything we've used so far comes from the prelude
+    -   Everything we've used so far comes from the prelude
 -   For more advanced features, you import additional modules
-    -   `import Std` gives you the extended standard library
-    -   We'll see more import examples in later lessons (DEBT)
+-   `import ModuleName` brings a library module into scope
+    -   Like Python's `import module`
+-   E.g., `import Lean` gives you Lean's meta-programming and tooling library
+    -   `Lean.versionString` reports which version of Lean is running
 
-## Namespaces
+## Namespaces {: #namespaces}
 
 [%inc namespaces.lean %]
 [%inc namespaces.out %]
@@ -130,8 +128,6 @@
     -   Like Python modules or C++ namespaces
 -   Two namespaces can define the same function name without collision
     -   `Greeting.hello` and `Farewell.hello` are different functions
--   Use `Namespace.name` to refer to a definition from outside
-    -   Like Python's `module.function` after `import module`
 
 ## Opening Namespaces
 
@@ -142,7 +138,7 @@
     -   Like Python's `from module import *`
 -   After `open Colors`, you can write `red` instead of `Colors.red`
 -   Use sparingly: it can make code harder to understand
-    -   Where did `red` come from? You have to scan upward to find the `open`
+    -   Also like `import *` in Python
 
 ## Standard Library Examples
 
@@ -172,10 +168,12 @@
     -   Indexed access `arr[i]!` is O(1)
     -   Appending is amortized O(1) (like Python's `list.append`)
     -   Cannot be pattern-matched with `::`
+    -   Indexed from 0, not 1 like tuples (just to keep things confusing)
 -   Python's `list` is closer to Lean's `Array` in performance
     -   If you're porting Python that uses `xs[i]`, use `Array` in Lean
     -   If you're writing idiomatic Lean with `map`/`filter`/`foldl`, `List` is the natural choice
--   Most IO functions (like `IO.FS.readDir`) return `Array`; pipeline functions work on `List`
+-   Most IO functions (like `IO.FS.readDir`) return `Array`
+    -   Pipeline functions work on `List`
     -   Convert with `arr.toList` or `lst.toArray` as needed
 
 <div class="exercise" markdown="1">

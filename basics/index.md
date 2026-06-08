@@ -232,7 +232,7 @@
 [%inc idiomatic.lean %]
 [%inc idiomatic.out %]
 
--   Use `·` (a centered dot) to match arguments in [%g point_free "point-free" %] style
+-   Use `·` (a centered dot) to match arguments
     -   Which is a horrible usability decision
 -   Type `\cdot` in the editor to get the centered dot and `\gt` to get `≥`
 -   If there are multiple arguments, each `·` matches the next one
