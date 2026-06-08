@@ -239,12 +239,9 @@
 <span class="w">  </span><span class="bp">|&gt;</span><span class="w"> </span><span class="n">List</span><span class="bp">.</span><span class="n">map</span><span class="w"> </span><span class="o">(</span><span class="bp">·</span><span class="w"> </span><span class="bp">*</span><span class="w"> </span><span class="mi">3</span><span class="o">)</span>
 <span class="w">  </span><span class="bp">|&gt;</span><span class="w"> </span><span class="n">List</span><span class="bp">.</span><span class="n">filter</span><span class="w"> </span><span class="o">(</span><span class="bp">·</span><span class="w"> </span><span class="bp">&lt;</span><span class="w"> </span><span class="mi">20</span><span class="o">)</span>
 <span class="w">  </span><span class="bp">|&gt;</span><span class="w"> </span><span class="n">List</span><span class="bp">.</span><span class="n">foldl</span><span class="w"> </span><span class="o">(</span><span class="bp">·</span><span class="w"> </span><span class="bp">+</span><span class="w"> </span><span class="bp">·</span><span class="o">)</span><span class="w"> </span><span class="mi">0</span><span class="w">    </span><span class="c1">-- use 0 as initial value</span>
-
-<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">result</span>
 </code></pre></div>
 </div>
 <div data-inc="pipelines.out"><span aria-label="Source: pipes/pipelines.out" class="inc-path" role="img" tabindex="0" title="pipes/pipelines.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>36
-36
 </code></pre></div>
 </div>
 <ul>
@@ -309,19 +306,14 @@
 </li>
 </ul>
 <h2>Importing Libraries</h2>
-<div data-inc="import_library.lean"><span aria-label="Source: pipes/import_library.lean" class="inc-path" role="img" tabindex="0" title="pipes/import_library.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- Batteries extends the standard library beyond the prelude</span>
-<span class="kn">import</span><span class="w"> </span><span class="n">Batteries</span>
+<div data-inc="import_library.lean"><span aria-label="Source: pipes/import_library.lean" class="inc-path" role="img" tabindex="0" title="pipes/import_library.lean">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code><span class="c1">-- import Lean to access modules beyond the prelude</span>
+<span class="kn">import</span><span class="w"> </span><span class="n">Lean</span>
 
-<span class="c1">-- Std.HashMap is not in the prelude; it requires an import</span>
-<span class="kn">def</span><span class="w"> </span><span class="n">scores</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Std</span><span class="bp">.</span><span class="n">HashMap</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">Nat</span><span class="w"> </span><span class="o">:=</span>
-<span class="w">  </span><span class="n">Std</span><span class="bp">.</span><span class="n">HashMap</span><span class="bp">.</span><span class="n">ofList</span><span class="w"> </span><span class="o">[(</span><span class="s2">"alice"</span><span class="o">,</span><span class="w"> </span><span class="mi">95</span><span class="o">),</span><span class="w"> </span><span class="o">(</span><span class="s2">"bob"</span><span class="o">,</span><span class="w"> </span><span class="mi">87</span><span class="o">)]</span>
-
-<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">scores</span><span class="bp">.</span><span class="n">find?</span><span class="w"> </span><span class="s2">"alice"</span>
-<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">scores</span><span class="bp">.</span><span class="n">find?</span><span class="w"> </span><span class="s2">"carol"</span>
+<span class="c1">-- Lean.versionString is not in the prelude; it requires an import</span>
+<span class="bp">#</span><span class="n">eval</span><span class="w"> </span><span class="n">Lean</span><span class="bp">.</span><span class="n">versionString</span>
 </code></pre></div>
 </div>
-<div data-inc="import_library.out"><span aria-label="Source: pipes/import_library.out" class="inc-path" role="img" tabindex="0" title="pipes/import_library.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>some 95
-none
+<div data-inc="import_library.out"><span aria-label="Source: pipes/import_library.out" class="inc-path" role="img" tabindex="0" title="pipes/import_library.out">i</span><div class="codehilite"><pre class="" tabindex="0"><span></span><code>"4.30.0"
 </code></pre></div>
 </div>
 <ul>
@@ -335,8 +327,8 @@ none
 <li>Like Python's <code>import module</code></li>
 </ul>
 </li>
-<li>E.g., <code>import Batteries</code> gives you the extended standard library<ul>
-<li><code>HashMap</code> maps keys to values, like Python's <code>dict</code></li>
+<li>E.g., <code>import Lean</code> gives you Lean's meta-programming and tooling library<ul>
+<li><code>Lean.versionString</code> reports which version of Lean is running</li>
 </ul>
 </li>
 </ul>
