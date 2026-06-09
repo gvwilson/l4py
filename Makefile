@@ -1,8 +1,6 @@
 # Regenerate .out files from .lean and .sh sources.
-#
-# Run `python bin/update-makefile.py` first to generate dependencies.mk,
-# then `make` to rebuild any stale .out files.
 
+SECTIONS := $(wildcard *.md) $(wildcard */index.md)
 OUTPUTS :=
 -include dependencies.mk
 
@@ -62,8 +60,6 @@ site:
 ## regen: regenerate outputs
 regen: $(OUTPUTS) dependencies.mk
 
-## depend: regenerate dependencies file
-depend: dependencies.mk
-
-dependencies.mk:
+## dependencies.mk: regenerate dependencies file
+dependencies.mk: $(SECTIONS)
 	@python bin/update-makefile.py

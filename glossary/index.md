@@ -35,6 +35,11 @@
 :   Unpacking values from a composite type such as a tuple or
     structure into individual bindings.
 
+<span id="discard_pattern">discard pattern</span>
+:   A binding that uses `_` or a name starting with `_` to intentionally
+    ignore a value. In a `do` block, `let _ := expr` silently discards
+    the result and suppresses the unused-variable compiler warning.
+
 <span id="des">discrete event simulation</span>
 :   A method of modeling a system where time advances in jumps from
     one event to the next rather than in fixed steps.

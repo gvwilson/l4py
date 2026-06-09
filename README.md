@@ -11,7 +11,7 @@
 1.  [Basics](@/basics/)
 1.  [Types](@/types/)
 1.  [Functional Pipelines](@/pipes/)
-1.  [I/O and Monads](@/io/)
+1.  [I/O](@/io/)
 1.  [A File Archiver](@/archive/)
 1.  [Matching Patterns](@/glob/)
 1.  [A Template Expander](@/template/)
@@ -38,6 +38,7 @@
 1.  [Contributing](@/contributing/)
 1.  [Bibliography](@/bibliography/)
 1.  [Glossary](@/glossary/)
+1.  [Monads](@/monads/)
 1.  [Proofs](@/proof/)
 
 </div>

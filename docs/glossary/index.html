@@ -23,7 +23,7 @@
 <li><a href="../basics/">Basics</a></li>
 <li><a href="../types/">Types</a></li>
 <li><a href="../pipes/">Functional Pipelines</a></li>
-<li><a href="../io/">I/O and Monads</a></li>
+<li><a href="../io/">I/O</a></li>
 <li><a href="../archive/">A File Archiver</a></li>
 <li><a href="../glob/">Matching Patterns</a></li>
 <li><a href="../template/">A Template Expander</a></li>
@@ -45,6 +45,7 @@
 <li><a href="../contributing/">Contributing</a></li>
 <li><a href="../bibliography/">Bibliography</a></li>
 <li><a class="active" href="../glossary/">Glossary</a></li>
+<li><a href="../monads/">Monads</a></li>
 <li><a href="../proof/">Proofs</a></li>
 </ul>
 </div>
@@ -82,6 +83,10 @@ sequence of functions each taking a single parameter.</dd>
 <dt><span id="destructuring">destructuring</span></dt>
 <dd>Unpacking values from a composite type such as a tuple or
 structure into individual bindings.</dd>
+<dt><span id="discard_pattern">discard pattern</span></dt>
+<dd>A binding that uses <code>_</code> or a name starting with <code>_</code> to intentionally
+ignore a value. In a <code>do</code> block, <code>let _ := expr</code> silently discards
+the result and suppresses the unused-variable compiler warning.</dd>
 <dt><span id="des">discrete event simulation</span></dt>
 <dd>A method of modeling a system where time advances in jumps from
 one event to the next rather than in fixed steps.</dd>
@@ -263,7 +268,7 @@ a shared build environment.</dd>
 	  <a href="../#acknowledgments">the authors</a>
 </div>
 <div class="col-3 right">
-<a href="../proof">Proofs</a> <span aria-hidden="true">⇒</span>
+<a href="../monads">Monads</a> <span aria-hidden="true">⇒</span>
 </div>
 </div>
 </footer>

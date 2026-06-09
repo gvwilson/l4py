@@ -1,4 +1,4 @@
-# I/O and Monads
+# I/O
 
 <div class="callout" markdown="1">
 
@@ -10,24 +10,28 @@
 </div>
 
 -   Every program eventually has to talk to the world
+-   But pure functions always return the same result for the same arguments,
+    so how do we handle something like reading from a file?
+-   The answer is complex in theory but simple(r) in practice
 
-## What Is IO? (And What Is a Monad?)
+## What Is `IO`?
 
 -   A function that does I/O has `IO` in its return type
     -   `String` means "a string, computed purely"
     -   `IO String` means "an action that, when run, produces a string"
     -   This pattern's formal name is a [%g monad "monad" %]
--   The compiler enforces that IO only happens where you say it does
+-   The compiler enforces that I/O only happens where you say it does
     -   Pure functions are guaranteed not to have side effects
     -   You can test and reason about them without worrying about hidden state
 -   This is like Python's `async def`: an async function must return an `Awaitable`
     -   You cannot accidentally run an async function from sync code
-    -   Lean's `IO` type is the same idea: the compiler prevents IO from leaking into pure functions
+    -   Lean's `IO` type is the same idea: the compiler prevents I/O from leaking into pure functions
 -   Separately, `do` and `←` (left arrow) are how you *sequence* effectful actions
+    -   Type `\leftarrow` in the editor
     -   This is the monad part: chaining steps where each depends on the last
     -   Like `await` lets you write sequential-looking code asynchronously, `←` does the same for IO
--   You do not need to understand the theory to use monads in Lean
-    -   (DEBT) We will revisit the theory once we are comfortable doing I/O
+-   You do not need to understand the theory of monads to use `IO` in Lean
+    -   But we describe it briefly in [an appendix](@/monads/)
 
 ## Hello World
 
@@ -41,8 +45,11 @@
 -   `IO.println` prints a string followed by a newline
     -   Newline plus indentation isn't required, but it helps
 -   `#eval main` runs the action during compilation so we can see the output
--   Lean's pure functions cannot raise exceptions; IO actions can fail at runtime and are caught with `try`/`catch`
-    -   Errors in pure code are handled with sum types like `Except`, which we'll cover later in this chapter
+-   Lean's pure functions cannot raise exceptions
+    -   I/O actions can fail at runtime and are caught with `try`/`catch`,
+        which we discuss [below](#catch)
+    -   Errors in pure code are handled with sum types like `Except`,
+        which we will also discussed [below](#except)
 
 ## Doing More Than One Thing
 
@@ -58,13 +65,15 @@
 -   If you want two or more actions in sequence, wrap them in `do`
 -   `;` can be used as an alternative separator inside `do` blocks
     -   E.g., `IO.println "Hi"; IO.println "there"` is equivalent to two lines
+    -   Generally avoided to keep code readable
 
 ## Forgetting `do`
 
-[%inc ex_missing_do.lean %]
+[%inc missing_do_err.lean %]
+[%inc missing_do_err.out %]
 
--   Forgetting `do` is the most common IO mistake
--   Without `do`, Lean tries to use the second `IO.println` as an argument to the first
+-   Forgetting `do` is the most common `IO` mistake
+-   Without it, Lean tries to use the second `IO.println` as an argument to the first
     -   That's why the error message mentions "application type mismatch"
 -   The fix: add `do` after `:=`
 
@@ -79,10 +88,12 @@
 -   You can call pure functions freely inside `do`
     -   Only the final `IO.println` does I/O
 -   The compiler will reject `let msg ← greet "Lean"` because `greet` does not return an `IO`
--   `let _ := expr` is the *discard* pattern: it binds a value but throws it away
+-   `let _ := expr` is the [%g discard_pattern "discard pattern" %]
+    -   It binds a value but throws it away
     -   The underscore means "I don't intend to use this"
     -   It also suppresses the unused-variable warning from the compiler
-    -   *Warning:* `let _ := someIOAction` stores the action without running it — use `←` for IO
+-   Be careful: `let _ := someIOAction` stores the action without running it
+    -   Use `←` for IO
 
 ## Functions That Return IO Actions
 
@@ -92,7 +103,7 @@
 -   A function can return an `IO Unit`: a reusable IO action
     -   Like Python's `async def`, calling it gives you something you still have to run
 -   `printTwice "echo!"` runs two `IO.println` calls in sequence
--   IO functions compose: `main` calls `printTwice` twice
+-   `IO` functions compose: `main` calls `printTwice` twice
 
 ## Capturing Results from IO
 
@@ -101,7 +112,6 @@
 
 -   Use `let x ← ioAction` (the left-arrow `←`) to capture the result of an IO action
     -   Like Python's `x = await some_coroutine()`
-    -   Type `\leftarrow` in the editor
 -   `makeGreeting` has type `IO String`: it is an action that produces a `String`
 -   `return expr` wraps a pure value as an IO result
     -   This is *not* the same as Python's `return`, which exits the function immediately
@@ -145,11 +155,20 @@
 [%inc for_loop.out %]
 
 -   `for x in list do` iterates over a list inside a `do` block
-    -   Like Python's `for x in list:` but the body is an IO action
+    -   Like Python's `for x in list:` but the body is an `IO` action
 -   Each iteration runs in sequence, top to bottom
 -   Works with `List`, `Array`, and any type that implements `ForIn`
-    -   Including the results of `IO.FS.readDir` (see [archive](@/archive/))
--   The loop is syntactic sugar for recursion — there is no mutable loop variable by default
+    -   Including the results of `IO.FS.readDir` (used in [archive](@/archive/))
+-   The loop is syntactic sugar for recursion: there is no mutable loop variable by default
+
+## For Loops Elsewhere
+
+-   `for` with `let mut` also works in pure functions that do not involve `IO`
+    -   Lean implicitly uses the identity monad and compiles the loop to a pure fold
+    -   The syntax is identical: `for x in xs do body`
+
+[%inc for_elsewhere.lean %]
+[%inc for_elsewhere.out %]
 
 ## Accumulating Results with `for`
 
@@ -157,24 +176,26 @@
 [%inc for_accum.out %]
 
 -   `let mut count := 0` declares a mutable variable in a `do` block
-    -   Only valid inside `do`; pure functions cannot use `mut`
--   `count := count + 1` updates it — without `:=`, the variable is read-only
--   Like Python's `count = 0; for w in words: if ...: count += 1`
+    -   Only valid inside `do`: pure functions cannot use `mut`
+-   `count := count + 1` updates it
+    -   Without `:=`, the variable is read-only
+-   Like Python's `count = 0; for w in words: if …: count += 1`
 -   Lean guarantees `mut` variables don't escape the `do` block
-    -   They are not truly mutable memory — the compiler translates them into state-passing
 
 ## What `let mut` Really Does
 
 [%inc let_mut_state.lean %]
 [%inc let_mut_state.out %]
 
--   `let mut` is syntactic sugar: the compiler rewrites mutable variables as extra function arguments threaded through each step
-    -   The generated code is purely functional; no heap mutation occurs
-    -   This is why pure functions can remain efficient even without mutable state: the compiler handles the bookkeeping
+-   `let mut` is syntactic sugar
+    -   The compiler rewrites mutable variables as extra function arguments threaded through each step
+    -   The generated code is purely functional: data structures are not mutated in place
+    -   This is why pure functions can remain efficient even without mutable state
+    -   The compiler handles the bookkeeping
 -   The pure `foldl` version and the `let mut` loop produce the same result
     -   For straightforward accumulation, the pure form is often shorter
     -   For complex logic with multiple conditions or early exit, `let mut` is usually easier to read
--   Both approaches are O(n) in the list length
+-   Both approaches have the same run time
 
 ## Summary
 
@@ -187,46 +208,54 @@
 -   Lean's `IO` is more than just files and sockets
 -   It also manages random number generation and any other [%g effectful "effectful" %] computation
 
-## Errors Without Exceptions
+## Errors Without Exceptions {: #except}
 
 [%inc except_pure.lean %]
 [%inc except_pure.out %]
 
 -   `Except String Int` is a sum type with two constructors:
-    -   `Except.ok n` — success, carrying a value of type `Int`
-    -   `Except.error e` — failure, carrying a message of type `String`
--   Like Python's `(value, error)` tuple convention, but the compiler forces you to check both cases
+    -   `Except.ok n`: success, carrying a value of type `Int`
+    -   `Except.error e`: failure, carrying a message of type `String`
+-   Like the `(value, error)` convention of other languages, but the compiler forces you to check both cases
 -   `match` on an `Except` is exhaustive: you cannot forget the error case
 -   Use `Except` for pure functions that can fail with a reason
     -   Use `Option` when absence is normal and no explanation is needed
 
-## IO Can Fail
+## I/O Can Fail {: #catch}
 
 [%inc except_io.lean %]
 [%inc except_io.out %]
 
 -   `try action catch _ => fallback` catches any IO exception
-    -   The `_` discards the exception value — inspect it with `catch e => ...` if needed
+    -   The `_` discards the exception value
+    -   Inspect it with `catch e => ...` if needed
 -   IO operations like `IO.FS.readFile` throw on failure (file not found, permission denied, etc.)
 -   Wrapping in `try`/`catch` converts an exception into a safe `Option` or `Except` value
--   Like Python's `try: ... except OSError: ...` but typed: the return type shows the fallback
+-   Like Python's `try: ... except OSError: ...` but typed
+    -   The return type shows the fallback
 -   Pure `Except` (from the previous section) and IO `try`/`catch` are complementary:
     -   Pure functions use `Except` to report errors without side effects
     -   IO functions use `try`/`catch` to handle runtime failures
 
-## Lean's Three Error-Handling Mechanisms
+## Three Ways to Do It
 
 Lean splits failure across three mechanisms where Python uses exceptions for all of them:
 
-| Mechanism | Where | When to use |
-|-----------|-------|-------------|
-| `Option` | Pure functions | Absence is normal; no explanation needed. E.g., looking up a key that may not exist. |
-| `Except e a` | Pure functions | Failure needs a reason. E.g., parsing a string that may be malformed. |
-| `try`/`catch` | IO actions | Runtime failure outside your control. E.g., file not found, network error. |
+1.  Use `Option` in pure functions when absence is normal and no explanation needed,
+    e.g., looking up a key that may not exist.
+
+1.  Use `Except e a` in pure functions when failure needs a reason,
+    e.g., parsing a string that may be malformed.
+
+1.  Use `try`/`catch` in IO actions when runtime failure outside your control,
+    e.g., file not found, or a network error.
 
 -   `Option` and `Except` appear in function signatures, so the compiler forces callers to handle failure
--   `try`/`catch` is only available in `IO`; you cannot silently ignore an IO exception
--   When migrating from Python: replace `None` returns with `Option`, replace `ValueError`/`KeyError` in pure logic with `Except`, and replace `OSError`/`IOError` with `try`/`catch` around IO actions
+-   `try`/`catch` is only available in `IO`: you cannot silently ignore an IO exception
+-   When migrating from Python:
+    -    Replace `None` returns with `Option`
+    -   Replace `ValueError`/`KeyError` in pure logic with `Except`
+    -   Replace `OSError`/`IOError` with `try`/`catch` around IO actions
 
 <div class="exercise" markdown="1">
 
