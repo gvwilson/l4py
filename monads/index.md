@@ -266,7 +266,7 @@ There are three reasons for this:
 
 1.  Tutorials often start too abstractly.
     "A monad is a monoid in the category of endofunctors"
-    is mathetmatically correctly but pedagogically horrible.
+    is mathematically correctly but pedagogically horrible.
 
 1.  Monads are more about composition than data structures.
     Programmers coming from conventional languages are used to thinking about
