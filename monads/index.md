@@ -311,3 +311,118 @@ def compute : Option Float := do
 Each `←` extracts the value from the `Option` context.
 If any step returns `none`, the whole computation short-circuits to `none`,
 which is exactly what `.bind()` did manually in Python.
+
+## A Second Look at `unit`
+
+In the Python `Maybe` monad above, `unit` does not actually do anything
+that the constructor does not already do:
+
+```python
+Maybe.unit(5)  # Maybe(5)
+Maybe(5)       # Maybe(5)
+```
+
+These are identical.
+`unit` is present because it names one of the two operations that formally define a monad,
+and writing `Maybe.unit(x)` signals "this is the entry point into the monadic context"
+rather than "I happen to be constructing an object."
+In a language with a real type system, `unit` carries a distinct type signature
+(`a -> M a`) that the compiler can enforce.
+In Python, it is a naming convention, not a functional requirement.
+
+## The List Monad
+
+The List monad shows where this distinction matters.
+The Maybe monad answers "did this computation succeed?"
+The List monad answers "what are all possible outcomes?"
+Instead of propagating failure, it propagates non-determinism:
+each step can return zero, one, or many values,
+and `bind` fans out across all of them automatically.
+
+### The Problem It Solves
+
+Suppose you want every combination of color and size:
+
+```python
+combos = []
+for color in ["red", "blue"]:
+    for size in ["S", "M", "L"]:
+        combos.append((color, size))
+```
+
+Nested loops like this multiply as you add dimensions.
+The List monad abstracts the "try every combination" pattern
+the same way Maybe abstracts "check for failure."
+
+### A Tiny List Monad in Python
+
+```python
+class ListM:
+    def __init__(self, values):
+        self.values = list(values)
+
+    def bind(self, f):
+        return ListM([y for x in self.values for y in f(x).values])
+
+    @staticmethod
+    def unit(x):
+        return ListM([x])
+
+    def __repr__(self):
+        return f"ListM({self.values})"
+```
+
+Here `unit` is not just a renamed constructor.
+`ListM(x)` calls `list(x)`, which iterates over `x`:
+
+```python
+ListM(5)        # TypeError: 'int' object is not iterable
+ListM.unit(5)   # ListM([5])
+```
+
+`unit` wraps a single value in a list before passing it to the constructor.
+Without it, there is no safe way to lift a plain value into the List context.
+
+`bind` applies `f` to every element and flattens the results.
+That flattening step is what makes it a monad rather than a plain map:
+each call to `f` returns a `ListM`, and `bind` collapses
+the resulting list of lists into one list.
+
+### Composing with bind
+
+Functions in this monad return a `ListM` of their possible outputs:
+
+```python
+def pick_color(_):
+    return ListM(["red", "blue"])
+
+def pick_size(color):
+    return ListM([(color, s) for s in ["S", "M", "L"]])
+```
+
+Chaining them:
+
+```python
+result = ListM.unit(None).bind(pick_color).bind(pick_size)
+# ListM([("red","S"), ("red","M"), ("red","L"),
+#        ("blue","S"), ("blue","M"), ("blue","L")])
+```
+
+Each step declares its own possibilities;
+the monad handles the cross-product automatically.
+An empty list at any step short-circuits that branch to nothing,
+which is the List monad's equivalent of Maybe's `none`.
+
+### In Lean's do Notation
+
+```lean
+def allPairs : List (String × String) := do
+  let color ← ["red", "blue"]
+  let size  ← ["S", "M", "L"]
+  return (color, size)
+```
+
+Each `←` means "for each possible value of..."
+The `return` at the end is `unit`:
+it lifts the plain tuple into the List context as a single result,
+rather than introducing a new set of choices.
